@@ -10,7 +10,7 @@ logger.level = 'debug';
 // Initialize Discord Bot
 var bot = new Discord.Client({
    token: auth.token,
-   autorun: true
+   autorun: true 
 });
 bot.on('ready', function (evt) {
     logger.info('Connected');
@@ -35,5 +35,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
             break;
             // Just add any case commands if you want to..
          }
-     }
+    }
+
+    
 });
