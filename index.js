@@ -68,6 +68,13 @@ bot.on('message', function (user, userID, channelID, message, evt) {
                                 to: channelID,
                                 message: 'Creating ET party'
                             })
+
+                            var date = args[2];
+                            var channel = args[3];
+                            bot.sendMessage({
+                                to: channelID,
+                                message: 'ET ' + '[' + date + ']' + ' (' + channel + ')'
+                            })
                         break;
                         default:
                             bot.sendMessage({
