@@ -1,12 +1,13 @@
 {
-  "name": "greeter-bot",
+  "name": "partyfind-bot",
   "version": "1.0.0",
-  "description": "Project Alpha Bot for Totality Guild in Ragnarok Mobile: Eternal Love.",
-  "main": "bot.js",
-  "author": "SilvStar",
+  "description": "Party Find Bot for Totality Guild in Ragnarok Mobile: Eternal Love.",
+  "main": "index.js",
+  "author": "SilvStar, Shelli",
   "dependencies": {
     "discord.io": "https://github.com/woor/discord.io/tarball/gateway_v6",
     "firebase": "^5.9.3",
     "winston": "^3.2.1"
-  }
+  },
+  "start": "node index.js"
 }

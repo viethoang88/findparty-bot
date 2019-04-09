@@ -1,6 +1,6 @@
 {
   "name": "PartyFind",
-  "version": 3,
+  "version": 1,
   "builds": [
     { "src": "idnex.js", "use": "@now/node" }
   ]   
