@@ -9,5 +9,7 @@
     "firebase": "^5.9.3",
     "winston": "^3.2.1"
   },
-  "start": "node index.js"
+  "scripts": {
+    "start": "node index.js"
+  }
 }
