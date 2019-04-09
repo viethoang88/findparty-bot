@@ -37,5 +37,8 @@ bot.on('message', function (user, userID, channelID, message, evt) {
          }
     }
 
+    if (message.startsWith('?findet')) {
+        var args = message.substring(1).split(' ');
+    }
     
 });
