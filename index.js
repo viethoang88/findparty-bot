@@ -1,202 +1,218 @@
-const Discord = require('discord.io');
-const logger = require('winston');
-const auth = require('./auth.json');
-const feathers = require('@feathersjs/feathers');
-const feathersApp = feathers();
+const Discord = require('discord.js')
+const logger = require('winston')
+const auth = require('./auth.json')
+const DBModule = require('./db.js')
+const DB = new DBModule()
 
 // Configure logger settings
-logger.remove(logger.transports.Console);
+logger.remove(logger.transports.Console)
 logger.add(new logger.transports.Console, {
     colorize: true
-});
-logger.level = 'debug';
+})
+logger.level = 'debug'
 
 // Initialize Discord Bot
 var bot = new Discord.Client({
    token: auth.token,
    autorun: true 
-});
+})
 bot.on('ready', function (evt) {
-    logger.info('Connected');
-    logger.info('Logged in as: ');
-    logger.info(bot.username + ' - (' + bot.id + ')');
-});
+    logger.info('Connected')
+    logger.info('Logged in as: ')
+    logger.info(bot.username + ' - (' + bot.id + ')')
+})
 
-bot.on('message', function (user, userID, channelID, message, evt) {
+bot.on('message', (message) => {
+    var channelID = message.channel.id
     // Our bot needs to know if it will execute a command
     // It will listen for messages that will start with `!`
-    if (message.substring(0, 1) == '^') {
-        var args = message.substring(1).split(' ');
-        var cmd = args[0];
+    if (message.content.substring(0, 1) == '^') {
+        var args = message.content.substring(1).split(' ')
+        var cmd = args[0]
+        
+        logger.info('CMD: ' + cmd)
+        logger.info('Args: ' + args)
+        var instance = args[1]
+        logger.info('Instance: ' + instance)
 
-        logger.info('CMD: ' + cmd);
-        logger.info('Args: ' + args);
-       
         switch(cmd) {
             // ^ping
             case 'ping':
-                bot.sendMessage({
+                bot.channel.send({
                     to: channelID,
                     message: 'Pong!'
-                });
-            break;
-            case 'create': 
+                })
+            break
+            case 'show': 
                 if (args.length > 0) {
-                    var instance = args[1];
-                    logger.info('Instance: ' + instance);
+                    switch(instance) {
+                        case 'ET':
+                            var results = DB.findAllET()
+                            logger.info(`ETs: ${results}`)
+                            message.channel.send(`There are ${results.length} created ET parties`)
+                            .then(msg => {
+                                setTimeout(function () {
+                                    msg.delete()
+                                }, 5000)                                
+                            })
+                            message.delete()
+
+                        break
+                    }
+                    
+                }
+            break
+            case 'create': 
+                logger.info(`args: ${args}`)
+                if (args.length > 0) {
                     switch(instance) {
                         case 'ET': 
                             //^create ET [date+time] (ROMChannel) #ET-1 {roles}
                             // roles: are optional (default: TANK PRIEST DPS DPS DPS)
-                            bot.sendMessage({
-                                to: channelID,
-                                message: 'Creating ET party'
-                            })
+                            logger.info('Creating ET party...')
 
-                            var dateTime = args[2]; // just string
-                            var romChannel = args[3]; // eg: EN14
-                            var discordChannel = args[4]; // #ET-1
-                            var roles = [];
+                            var dateTime = args[2] // just string
+                            var romChannel = args[3] // eg: EN14
+                            var discordChannel = args[4] // #ET-1
+                            var roles = []
 
                             if (args.length > 5) {
-                                roles.push(args[5]);
-                                roles.push(args[6]);
-                                roles.push(args[7]);
-                                roles.push(args[8]);
-                                roles.push(args[9]);
+                                roles.push(args[5])
+                                roles.push(args[6])
+                                roles.push(args[7])
+                                roles.push(args[8])
+                                roles.push(args[9])
                             }
 
-                            createET(channelID, dateTime, romChannel, discordChannel, roles);
-                        
-                            // bot.sendMessage({
-                            //     to: channelID,
-                            //     message: 'ET ' + '[' + dateTime + ']' + ' (' + romChannel + ')'
-                            // })
-                        break;
+                            logger.info(`roles: ${roles}`)
+
+                            var newET = DB.createET(dateTime, romChannel, discordChannel, roles)
+                            const embed = new Discord.RichEmbed()
+                                .setTitle(`ET ${newET.name} [${dateTime}] (${romChannel})`)
+                                .setColor(0xFF0000)
+                                .setDescription(`${discordChannel}`)
+                                .addField(`1. ${newET.role1Name}`, 'Empty')
+                                .addField(`2. ${newET.role2Name}`, 'Empty')
+                                .addField(`3. ${newET.role3Name}`, 'Empty')
+                                .addField(`4. ${newET.role4Name}`, 'Empty')
+                                .addField(`5. ${newET.role5Name}`, 'Empty')
+
+                            message.channel.send(embed)
+                            // message.delete()
+                        break
                         default:
-                            bot.sendMessage({
-                                to: channelID,
-                                message: instance + ' does not exists. Please use ET, Oracle, MVP, BQRIFT, ANY'
-                            })
-                        break;
+                            message.channel.send(instance + ' does not exists. Please use ET, Oracle, MVP, BQRIFT, ANY')
+                        break
                     }
                 }
-            break;
-            // Just add any case commands if you want to..
+            break
+            case 'join': 
+                if (args.length > 0) {
+                    switch(instance) {
+                        case 'ET':
+                            var etName = args[2]
+                            var role = args[3]
+                            var etParty = DB.findET(etName)
+
+                            if (role === null) {
+                                message.channel.send('Please specify your role. Use number from 1-5')
+                                break;
+                            }
+
+                            if (etParty !== null) {
+                                logger.info(`ET: ${etParty}`)
+                                var canJoin = false
+                                var duplicate = false
+                                if (etParty.role1Name !== null && role === '1') {
+                                    etParty.role1User = message.author.id
+                                    canJoin = true;
+                                }
+
+                                if (etParty.role2Name !== null && role === '2') {
+                                    etParty.role2User = message.author.id
+                                    canJoin = true;
+                                }
+
+                                if (etParty.role3Name !== null && role === '3') {
+                                    etParty.role3User = message.author.id
+                                    canJoin = true;
+                                }
+
+                                if (etParty.role4Name !== null && role === '4') {
+                                    etParty.role4User = message.author.id
+                                    canJoin = true;
+                                }
+
+                                if (etParty.role5Name !== null && role === '5') {
+                                    etParty.role5User = message.author.id
+                                    canJoin = true;
+                                }
+
+                                if (canJoin) {
+
+                                    // if (etParty.role1User === message.author.tag || etParty.role2User === message.author.tag || etParty.role3User === message.author.tag || etParty.role4User === message.author.tag || etParty.role5User === message.author.tag) {
+                                    //     duplicate = true;
+                                    // } 
+                                }
+                                
+                                if (canJoin && !duplicate) {
+                                    var newET = DB.updateET(etParty)
+                                    message.channel.send(`${message.author.tag} have joined ${etName} as ${role}`)
+                                        .then(msg => {
+                                            setTimeout(function () {
+                                                msg.delete()
+                                            }, 5000)                                
+                                        })
+    
+                                    const embed = new Discord.RichEmbed()
+                                        .setTitle(`ET ${newET.name} [${newET.date}] (${newET.romChannel})`)
+                                        .setColor(0xFF0000)
+                                        .setDescription(`${newET.discordChannel}`)
+                                        .addField(`1. ${newET.role1Name}`, newET.role1User === null ? 'Empty' : '<@' + newET.role1User + '>')
+                                        .addField(`2. ${newET.role2Name}`, newET.role2User === null ? 'Empty' : '<@' + newET.role2User + '>')
+                                        .addField(`3. ${newET.role3Name}`, newET.role3User === null ? 'Empty' : '<@' + newET.role3User + '>')
+                                        .addField(`4. ${newET.role4Name}`, newET.role4User === null ? 'Empty' : '<@' + newET.role4User + '>')
+                                        .addField(`5. ${newET.role5Name}`, newET.role5User === null ? 'Empty' : '<@' + newET.role5User + '>')
+    
+                                    message.channel.send(embed)
+                                } else {
+                                    if (duplicate) {
+                                        message.channel.send(`OMG ${message.author.username}! You already joined.`)
+                                    } else {
+                                        etParty.queue.push(message.author.username)
+                                        var newET = DB.updateET(etParty)
+                                        const embed = new Discord.RichEmbed()
+                                            .setTitle(`ET ${newET.name} [${newET.date}] (${newET.romChannel})`)
+                                            .setColor(0xFF0000)
+                                            .setDescription(`${newET.discordChannel}`)
+                                            .addField(`1. ${newET.role1Name}`, newET.role1User === null ? 'Empty' : newET.role1User)
+                                            .addField(`2. ${newET.role2Name}`, newET.role2User === null ? 'Empty' : newET.role2User)
+                                            .addField(`3. ${newET.role3Name}`, newET.role3User === null ? 'Empty' : newET.role3User)
+                                            .addField(`4. ${newET.role4Name}`, newET.role4User === null ? 'Empty' : newET.role4User)
+                                            .addField(`5. ${newET.role5Name}`, newET.role5User === null ? 'Empty' : newET.role5User)
+                                            .addField(`Queue`, `${newET.queue}`)
+        
+                                        message.channel.send(embed)
+                                        message.channel.send(`Sorry ${message.author.username} all slots are taken. You have been added as to queue.`)
+                                    }
+                                }
+                                
+                            } else {
+                                message.channel.send(`Cannot join party. No ET Party found for ID: ${etName}`)
+                            }
+                            // message.delete()
+
+                        break
+                    }
+                    
+                }
+            break
+            case 'delete':
+            break
+
          }
     }
     
-});
-
-async function createET(channelID, date, romChannel, discordChannel, roles) {
-    var newEt;
-    if (roles.length > 0) {
-        newEt = {
-          date: date,
-          romChannel: romChannel,
-          discordChannel: discordChannel,
-          role1Name: roles[0],
-          role2Name: roles[1],
-          role3Name: roles[2],
-          role4Name: roles[3],
-          role5Name: roles[4]
-        }
-    } else {
-        newEt = {
-            date: date,
-            romChannel: romChannel,
-            discordChannel: discordChannel,
-            role1Name: 'TANK',
-            role2Name: 'PRIEST',
-            role3Name: 'DPS',
-            role4Name: 'DPS',
-            role5Name: 'DPS'
-          }
-    } 
-
-    await app.service('et').create({
-        date: date,
-        romChannel: romChannel,
-        discordChannel: discordChannel,
-    });
-
-    bot.sendMessage({
-        to: channelID,
-        message: 'ET ' + '[' + dateTime + ']' + ' (' + romChannel + ') $(discordChannel) \n' +
-                 '1. $(role1Name) \n' + 
-                 '2. $(role2Name) \n' +
-                 '3. $(role3Name) \n' +
-                 '4. $(role4Name) \n' +
-                 '5. $(role5Name) \n'
-    })
-}
-
-// Setup feathers 
-feathersApp.use('et', {
-    // async get(id) {
-    //     return {
-    //         id, 
-    //         date, 
-    //         romChannel,
-    //         discordChannel,
-    //         comment,
-    //         role1Name,
-    //         role1User,
-    //         role2Name, 
-    //         role2User,
-    //         role3Name,
-    //         role3User,
-    //         role4Name, 
-    //         role4User,
-    //         role5Name,
-    //         role5User,
-    //     }
-    // }
 })
 
-class ET {
-    constructor() {
-        this.ets = [];
-        this.currentId = 0;
-    }
-
-    async find(params) {
-        return this.ets;
-    }
-
-    async get(id, params) {
-        const et = this.ets.find(et => et.id === parseInt(id, 10));
-
-        if (!et) {
-            throw new Error('No ET instance found with id ${id}');
-        }
-
-        return et;
-    }
-
-    async create(data, params) {
-        const et = Object.assign({
-            id: ++this.currentId
-        }, data);
-
-        this.ets.push(et);
-
-        return et;
-    }
-
-    async patch(id, data, params) {
-        const et = await this.get(id);
-
-        return Object.assign(et, data);
-    }
-
-    async remove(id, params) {
-        const et = await this.get(id);
-
-        const index = this.ets.indexOf(et);
-
-        this.ets.splice(index, 1);
-
-        return et;
-    }
-}
+bot.login(auth.token)
