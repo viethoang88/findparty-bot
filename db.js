@@ -1,18 +1,20 @@
 const loki = require('lokijs')
-// var db = new loki('totality.json', {
-//   autoload: true,
-//   autoloadCallback : databaseInitialize,
-//   autosave: true, 
-//   autosaveInterval: 4000
-// })
-var db = new loki('totality.json')
+const randomColor = require('randomcolor');
+
+var db = new loki('totality.json', {
+  autoload: true,
+  autoloadCallback : databaseInitialize,
+  autosave: true, 
+  autosaveInterval: 4000
+})
+// var db = new loki('totality.json')
 
 var etDB
 var oracleDB
 
 function databaseInitialize() {
-  // etDB = db.getCollection("et")
-  etDB = db.addCollection('et')
+  etDB = db.getCollection("et")
+  // etDB = db.addCollection('et')
   if (etDB === null) {
     etDB = db.addCollection('et')
   }
@@ -25,7 +27,7 @@ class DBModule {
 
   makeid(length) {
     var text = ""
-    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+    var possible = "0123456789"
   
     for (var i = 0; i < length; i++)
       text += possible.charAt(Math.floor(Math.random() * possible.length))
@@ -37,46 +39,70 @@ class DBModule {
     return etDB.find()
   }
 
+  findMyETs(userId) {
+    var joinedInRole1ByMe = etDB.find({role1User: userId})
+    var joinedInRole2ByMe = etDB.find({role2User: userId})
+    var joinedInRole3ByMe = etDB.find({role3User: userId})
+    var joinedInRole4ByMe = etDB.find({role4User: userId})
+    var joinedInRole5ByMe = etDB.find({role5User: userId})
+
+    return joinedInRole1ByMe.concat(joinedInRole2ByMe).concat(joinedInRole3ByMe).concat(joinedInRole4ByMe).concat(joinedInRole5ByMe)
+  }
+
   findET(name) {
     return etDB.findOne({name: name})
   }
 
-  createET(date, romChannel, discordChannel, roles) {
+  createET(createdBy, customId, date, romChannel, discordChannel, roles) {
     var newEt
-    if (roles.length > 0) {
+    if (roles && roles.length > 0) {
         newEt = {
-          name: this.makeid(5),
+          createdBy: createdBy,
+          name: customId ? customId : this.makeid(5),
+          color: randomColor(),
           date: date,
           romChannel: romChannel,
           discordChannel: discordChannel,
           role1Name: roles[0],
           role1User: null,
+          role1Alt: false,
           role2Name: roles[1],
           role2User: null,
+          role2Alt: false,
           role3Name: roles[2],
           role3User: null,
+          role3Alt: false,
           role4Name: roles[3],
           role4User: null,
+          role4Alt: false,
           role5Name: roles[4],
           role5User: null,
+          role5Alt: false,
           queue: []
         }
     } else {
         newEt = {
-            name: this.makeid(5),
+            createdBy: createdBy,
+            name: customId ? customId : this.makeid(5),
+            color: randomColor(),
             date: date,
             romChannel: romChannel,
             discordChannel: discordChannel,
             role1Name: 'TANK',
             role1User: null,
+            role1Alt: false,
             role2Name: 'PRIEST',
             role2User: null,
+            role2Alt: false,
             role3Name: 'DPS',
             role3User: null,
+            role3Alt: false,
             role4Name: 'DPS',
             role4User: null,
+            role4Alt: false,
             role5Name: 'DPS',
             role5User: null,
+            role5Alt: false,
             queue: []
           }
     } 
@@ -86,6 +112,10 @@ class DBModule {
 
   updateET(et) {
     return etDB.update(et)
+  }
+
+  deleteET(name) {
+    etDB.chain().find({name: name}).remove()
   }
 }
 
