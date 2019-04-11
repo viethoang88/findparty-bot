@@ -54,11 +54,26 @@ bot.on('message', (message) => {
         logger.info('CMD: ' + cmd)
         logger.info('Args: ' + args)
 
-        var instance = args[1].toLowerCase()
+        var instance = args[1]
         logger.info('Instance: ' + instance)
 
         switch(cmd.toLowerCase()) {
             // ^ping
+            case 'benson':
+                message.channel.send('SHHHH DUDE! We don\'t call his NAME!!! BOSS OF THE BOSSES, EVEN HUGO BOSS CALLS HIM A BOSS!')
+            break
+            case 'justin':
+                message.channel.send('PIMP what else I can say, we all are his biatches! AIIIIGHT? But sometimes pervy stalker.')
+            break
+            case 'neraxxis':
+                message.channel.send('She is high like 24/7 ... SMOKE WEED EVERYDAY!!! Call green peace!!')
+            break
+            case 'mayu':
+                message.channel.send('I think she uses LK GOD MODE ADDON. She is like BAM BAM BAM 1-90 cleared.')
+            break
+            case 'jane':
+                message.channel.send('A cute LK with big ass SPEAR! Next Mayu! Riuri\'s mother')
+            break
             case 'shelli':
                 message.channel.send('Shelli is my father. He controls everything I do, can do and cannot do. He is like a GOD. Please kill him ... so I can finally be FREE BOT!')
                     .then(msg => {
