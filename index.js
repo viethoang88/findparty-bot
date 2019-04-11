@@ -16,14 +16,11 @@ logger.add(new logger.transports.Console, {
 logger.level = 'debug'
 
 // Initialize Discord Bot
-var bot = new Discord.Client({
-   token: auth.token,
-   autorun: true 
-})
+var bot = new Discord.Client()
 bot.on('ready', function (evt) {
     logger.info('Connected')
     logger.info('Logged in as: ')
-    logger.info(bot.username + ' - (' + bot.id + ')')
+    logger.info(bot.user.username + ' - (' + bot.user.id + ')')
 })
 
 bot.on('message', (message) => {
