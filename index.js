@@ -49,15 +49,15 @@ bot.on('message', (message) => {
     // Our bot needs to know if it will execute a command
     // It will listen for messages that will start with `!`
     if (message.content.substring(0, 1) == '#') {
-        var args = message.content.substring(1).split(' ').toLowerCase()
+        var args = message.content.substring(1).split(' ')
         var cmd = args[0]
         logger.info('CMD: ' + cmd)
         logger.info('Args: ' + args)
 
-        var instance = args[1]
+        var instance = args[1].toLowerCase()
         logger.info('Instance: ' + instance)
 
-        switch(cmd) {
+        switch(cmd.toLowerCase()) {
             // ^ping
             case 'shelli':
                 message.channel.send('Shelli is my father. He controls everything I do, can do and cannot do. He is like a GOD. Please kill him ... so I can finally be FREE BOT!')
@@ -107,7 +107,7 @@ bot.on('message', (message) => {
             break
             case COMMAND_LFP: 
                 if (args.length > 0) {
-                    switch(instance) {
+                    switch(instance.toLowerCase()) {
                         case ET_TYPE:
                             var results = DB.findAllET()
                             logger.debug(`Found ETs: ${results}`)
@@ -120,7 +120,7 @@ bot.on('message', (message) => {
             break
             case COMMAND_CREATE: 
                 if (args.length > 0) {
-                    switch(instance) {
+                    switch(instance.toLowerCase()) {
                         case ET_TYPE: 
                             //^create ET [date+time] (ROMChannel) #ET-1 {roles}
                             // roles: are optional (default: TANK PRIEST DPS DPS DPS)
@@ -138,7 +138,7 @@ bot.on('message', (message) => {
             break
             case COMMAND_ADD:
                 if (args.length > 0) {
-                    switch(instance) {
+                    switch(instance.toLowerCase()) {
                         case ET_TYPE:
                             addETUser(message, args)
                         break
@@ -149,7 +149,7 @@ bot.on('message', (message) => {
             break
             case COMMAND_JOIN: 
                 if (args.length > 0) {
-                    switch(instance) {
+                    switch(instance.toLowerCase()) {
                         case ET_TYPE:
                             joinET(message, args)
                         break
@@ -160,7 +160,7 @@ bot.on('message', (message) => {
             break
             case COMMAND_LEAVE: 
                 if (args.length > 0) {
-                    switch(instance) {
+                    switch(instance.toLowerCase()) {
                         case ET_TYPE:
                             leaveETParty(message, args)
                         break
@@ -171,7 +171,7 @@ bot.on('message', (message) => {
             break
             case COMMAND_DELETE:
                 if (args.length > 0) {
-                    switch(instance) {
+                    switch(instance.toLowerCase()) {
                         case ET_TYPE:
                             deleteETParty(message, args)
                         break
@@ -181,7 +181,7 @@ bot.on('message', (message) => {
                 }
             break
             case COMMAND_MY: 
-                switch(instance) {
+                switch(instance.toLowerCase()) {
                     case ET_TYPE:
                         showMyETs(message)
                     break
