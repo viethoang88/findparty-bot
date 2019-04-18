@@ -10,7 +10,7 @@ const COMMAND_HELP = 'help'
 const COMMAND_CREATE = 'create'
 const COMMAND_JOIN = 'join'
 const COMMAND_ADD = 'add'
-const COMMAND_LFP = 'lfp'
+const COMMAND_LIST = 'list'
 const COMMAND_MY = 'my'
 const COMMAND_DELETE = 'delete'
 const COMMAND_LEAVE = 'leave'
@@ -24,6 +24,7 @@ const VAL_60_TYPE = 'val60'
 const VAL_80_TYPE = 'val80'
 const VAL_100_TYPE = 'val100'
 
+var CMD_PREFIX = 'f?'
 var AUTO_DELETE_MODE = false
 var AUTO_DELETE_TIME = 15000
 
@@ -47,9 +48,9 @@ bot.on('ready', function (evt) {
 bot.on('message', (message) => {
     var channelID = message.channel.id
     // Our bot needs to know if it will execute a command
-    // It will listen for messages that will start with `!`
-    if (message.content.substring(0, 1) == '#') {
-        var args = message.content.substring(1).split(' ')
+    // It will listen for messages that will start with command prefix specified in variable CMD_PREFIX declared above
+    if (message.content.substring(0, 2) == CMD_PREFIX) {
+        var args = message.content.substring(2).split(' ')
         var cmd = args[0]
         logger.info('CMD: ' + cmd)
         logger.info('Args: ' + args)
@@ -120,7 +121,7 @@ bot.on('message', (message) => {
             case COMMAND_HELP:
                 showHelp(message)
             break
-            case COMMAND_LFP: 
+            case COMMAND_LIST: 
                 if (args.length > 0) {
                     switch(instance.toLowerCase()) {
                         case ET_TYPE:
@@ -202,6 +203,9 @@ bot.on('message', (message) => {
                     break
                 }
             break
+            default:
+                message.channel.send('This don\'t do anything. Please check your spelling. Use **' + CMD_PREFIX + 'help** for list of commands available.')
+            break
          }
     }
     
@@ -211,22 +215,24 @@ function showHelp(message) {
     var helpEmbed = new Discord.RichEmbed()
         .setTitle('User manual for creating and find party')
         .setDescription('Please follow the instructions and put correct brackets as below. Please use commands carefully, bot is fragile :)')
-        .addField('Search for ET parties', 'Command: #LFP ET')
+        .addField('List out all ET parties or specific party (coming soon)', 
+            'Command: f?list ET or f?list ET ID\n' +
+            'Example: f?list ET se42GD\n')
         .addField('Create ET party', 
-            'Command: #create ET [date and time] (ROM Channel) #discord-channel $CUSTOM ROLES$\n' +
-            'Example: #create ET [19 May 16:30] (EN14) #et-1 $TANK PRIEST MVP RANGED WIZ$\n' +
+            'Command: f?create ET [date and time] (ROM Channel) #discord-channel $CUSTOM ROLES$\n' +
+            'Example: f?create ET [19 May 16:30] (EN14) #et-1 $TANK PRIEST MVP RANGED WIZ$\n' +
             'Notes: After creation there will be 5 character ID for each party. Use it in other commands\n' +
             'Date in [] brackets will be displayed as you enter there is no processing done on date/time/timezone\n' + 
             '$Roles$ are optional if you don\'t specify roles will be automatically set to TANK PRIEST DPS DPS DPS')
         .addField('Join ET party', 
-            'Command: #join ET ID slot#\n' +
-            'Example: #join ET se42GD 2') 
+            'Command: f?join ET ID slot#\n' +
+            'Example: f?join ET se42GD 2') 
         .addField('Leave ET party', 
-            'Command: #leave ET ID\n (reason)' +
-            'Example: #leave ET se42GD (I am not feeling well)')   
+            'Command: f?leave ET ID\n (reason)' +
+            'Example: f?leave ET se42GD (I am not feeling well)')
         .addField('Delete ET party', 
-            'Command: #delete ET ID\n' +
-            'Example: #delete ET se42GD\n' +
+            'Command: f?delete ET ID\n' +
+            'Example: f?delete ET se42GD\n' +
             'Notes: Only creator of party or Person with priviledge can delete party.')   
     message.channel.send(helpEmbed)
         .then(msg => {
@@ -732,6 +738,14 @@ function showMyETs(message) {
             .setAuthor(`${bot.users.get(et.createdBy).username}`, `${bot.users.get(et.createdBy).avatarURL}`)
         message.channel.send(embed)
     })
+}
+
+function isDefined(variable) {
+    if (typeof variable==='undefined' || variable === null) {
+        return false
+    } else {
+        return true
+    }
 }
 
 bot.login(auth.token)
