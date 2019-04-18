@@ -122,7 +122,7 @@ bot.on('message', (message) => {
                 showHelp(message)
             break
             case COMMAND_LIST: 
-                if (args.length > 0) {
+                if (args.length > 0 && isDefined(instance)) {
                     switch(instance.toLowerCase()) {
                         case ET_TYPE:
                             var results = DB.findAllET()
@@ -130,12 +130,14 @@ bot.on('message', (message) => {
                             displayLFPETResults(message, results)
                         break
                     }
+                } else if (isDefined(instance)===false) {
+                    message.channel.send('Please specify which list you are requesting, ET, Oracle, MVP or Any. E.g. ' + CMD_PREFIX + 'LIST ET se42GD')
                 } else {
                     showHelp(message)
                 }
             break
             case COMMAND_CREATE: 
-                if (args.length > 0) {
+                if (args.length > 0 && isDefined(instance)) {
                     switch(instance.toLowerCase()) {
                         case ET_TYPE: 
                             //^create ET [date+time] (ROMChannel) #ET-1 {roles}
@@ -148,59 +150,73 @@ bot.on('message', (message) => {
                             message.channel.send(instance + ' does not exists. Please use ET, Oracle, MVP, BQRIFT, ANY')
                         break
                     }
+                } else if (isDefined(instance)===false) {
+                    message.channel.send('Please specify what party you are creating, ET, Oracle, MVP or Any.')
                 } else {
                     showHelp(message)
                 }
             break
             case COMMAND_ADD:
-                if (args.length > 0) {
+                if (args.length > 0 && isDefined(instance)) {
                     switch(instance.toLowerCase()) {
                         case ET_TYPE:
                             addETUser(message, args)
                         break
                     }
+                } else if (isDefined(instance)===false) {
+                    message.channel.send('Opps, there is a problem processing your request. Please check your format.')
                 } else {
                     showHelp(message)
                 }
             break
             case COMMAND_JOIN: 
-                if (args.length > 0) {
+                if (args.length > 0 && isDefined(instance)) {
                     switch(instance.toLowerCase()) {
                         case ET_TYPE:
                             joinET(message, args)
                         break
                     }
+                } else if (isDefined(instance)===false) {
+                    message.channel.send('Opps, there is a problem processing your request. Please check your format.')
                 } else {
                     showHelp(message)
                 }
             break
             case COMMAND_LEAVE: 
-                if (args.length > 0) {
+                if (args.length > 0 && isDefined(instance)) {
                     switch(instance.toLowerCase()) {
                         case ET_TYPE:
                             leaveETParty(message, args)
                         break
                     }
+                } else if (isDefined(instance)===false) {
+                    message.channel.send('Opps, there is a problem processing your request. Please check your format.')
                 } else {
                     showHelp(message)
                 }
             break
             case COMMAND_DELETE:
-                if (args.length > 0) {
+                if (args.length > 0 && isDefined(instance)) {
                     switch(instance.toLowerCase()) {
                         case ET_TYPE:
                             deleteETParty(message, args)
                         break
                     }
+                } else if (isDefined(instance)===false) {
+                    message.channel.send('Opps, there is a problem processing your request. Please check your format.')
                 } else {
                     showHelp(message)
                 }
             break
-            case COMMAND_MY: 
-                switch(instance.toLowerCase()) {
-                    case ET_TYPE:
-                        showMyETs(message)
-                    break
+            case COMMAND_MY:
+                if (isDefined(instance)) {
+                    switch(instance.toLowerCase()) {
+                        case ET_TYPE:
+                            showMyETs(message)
+                        break
+                    }
+                } else if (isDefined(instance)===false) {
+                    message.channel.send('Opps, there is a problem processing your request. Please check your format.')
                 }
             break
             default:
