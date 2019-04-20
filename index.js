@@ -24,7 +24,7 @@ const VAL_60_TYPE = 'val60'
 const VAL_80_TYPE = 'val80'
 const VAL_100_TYPE = 'val100'
 
-var CMD_PREFIX = 'f?'
+var CMD_PREFIX = '?'
 var AUTO_DELETE_MODE = false
 var AUTO_DELETE_TIME = 15000
 
@@ -49,8 +49,8 @@ bot.on('message', (message) => {
     var channelID = message.channel.id
     // Our bot needs to know if it will execute a command
     // It will listen for messages that will start with command prefix specified in variable CMD_PREFIX declared above
-    if (message.content.substring(0, 2) == CMD_PREFIX) {
-        var args = message.content.substring(2).split(' ')
+    if (message.content.substring(0, 1) == CMD_PREFIX) {
+        var args = message.content.substring(1).split(' ')
         var cmd = args[0]
         logger.info('CMD: ' + cmd)
         logger.info('Args: ' + args)
@@ -131,7 +131,8 @@ bot.on('message', (message) => {
                         break
                     }
                 } else if (isDefined(instance)===false) {
-                    message.channel.send('Please specify which list you are requesting, ET, Oracle, MVP or Any. E.g. ' + CMD_PREFIX + 'LIST ET se42GD')
+                    // message.channel.send('Please specify which list you are requesting, ET, Oracle, MVP or Any. E.g. ' + CMD_PREFIX + 'LIST ET se42GD')
+                    message.channel.send('Please use ' + CMD_PREFIX + 'list ET. You can also list a specific party. E.g. ' + CMD_PREFIX + 'list ET se42GD')
                 } else {
                     showHelp(message)
                 }
@@ -232,23 +233,23 @@ function showHelp(message) {
         .setTitle('User manual for creating and find party')
         .setDescription('Please follow the instructions and put correct brackets as below. Please use commands carefully, bot is fragile :)')
         .addField('List out all ET parties or specific party (coming soon)', 
-            'Command: f?list ET or f?list ET ID\n' +
-            'Example: f?list ET se42GD\n')
+            'Command: ?list ET or ?list ET ID\n' +
+            'Example: ?list ET se42GD\n')
         .addField('Create ET party', 
-            'Command: f?create ET [date and time] (ROM Channel) #discord-channel $CUSTOM ROLES$\n' +
-            'Example: f?create ET [19 May 16:30] (EN14) #et-1 $TANK PRIEST MVP RANGED WIZ$\n' +
+            'Command: ?create ET [date and time] (ROM Channel) #discord-channel $CUSTOM ROLES$\n' +
+            'Example: ?create ET [19 May 16:30] (EN14) #et-1 $TANK PRIEST MVP RANGED WIZ$\n' +
             'Notes: After creation there will be 5 character ID for each party. Use it in other commands\n' +
             'Date in [] brackets will be displayed as you enter there is no processing done on date/time/timezone\n' + 
             '$Roles$ are optional if you don\'t specify roles will be automatically set to TANK PRIEST DPS DPS DPS')
         .addField('Join ET party', 
-            'Command: f?join ET ID slot#\n' +
-            'Example: f?join ET se42GD 2') 
+            'Command: ?join ET ID slot#\n' +
+            'Example: ?join ET se42GD 2') 
         .addField('Leave ET party', 
-            'Command: f?leave ET ID\n (reason)' +
-            'Example: f?leave ET se42GD (I am not feeling well)')
+            'Command: ?leave ET ID\n (reason)' +
+            'Example: ?leave ET se42GD (I am not feeling well)')
         .addField('Delete ET party', 
-            'Command: f?delete ET ID\n' +
-            'Example: f?delete ET se42GD\n' +
+            'Command: ?delete ET ID\n' +
+            'Example: ?delete ET se42GD\n' +
             'Notes: Only creator of party or Person with priviledge can delete party.')   
     message.channel.send(helpEmbed)
         .then(msg => {
