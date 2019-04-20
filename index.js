@@ -1,32 +1,34 @@
-const Discord = require('discord.js')
-const logger = require('winston')
-const auth = require('./auth.json')
-const DBModule = require('./db.js')
-const randomColor = require('randomcolor')
+const fs = require('fs');
+const Discord = require('discord.js');
+const logger = require('winston');
+const auth = require('./auth.json');
+const DBModule = require('./db.js');
+const randomColor = require('randomcolor');
+const varFile = require('./variables/var.js');
 
-const DB = new DBModule()
+// const DB = new DBModule();
 
-const COMMAND_HELP = 'help'
-const COMMAND_CREATE = 'create'
-const COMMAND_JOIN = 'join'
-const COMMAND_ADD = 'add'
-const COMMAND_LIST = 'list'
-const COMMAND_MY = 'my'
-const COMMAND_DELETE = 'delete'
-const COMMAND_LEAVE = 'leave'
+const COMMAND_HELP = 'help';
+const COMMAND_CREATE = 'create';
+const COMMAND_JOIN = 'join';
+const COMMAND_ADD = 'add';
+const COMMAND_LIST = 'list';
+const COMMAND_MY = 'my';
+const COMMAND_DELETE = 'delete';
+const COMMAND_LEAVE = 'leave';
 
-const ET_TYPE = 'et'
-const ORACLE_TYPE = 'oracle'
-const MVP_TYPE = 'mvp'
-const BQ = 'bq'
-const VAL_40_TYPE = 'val40'
-const VAL_60_TYPE = 'val60'
-const VAL_80_TYPE = 'val80'
-const VAL_100_TYPE = 'val100'
+// const ET_TYPE = 'et'
+// const ORACLE_TYPE = 'oracle'
+// const MVP_TYPE = 'mvp'
+// const BQ = 'bq'
+// const VAL_40_TYPE = 'val40'
+// const VAL_60_TYPE = 'val60'
+// const VAL_80_TYPE = 'val80'
+// const VAL_100_TYPE = 'val100'
 
-var CMD_PREFIX = '?'
-var AUTO_DELETE_MODE = false
-var AUTO_DELETE_TIME = 15000
+var CMD_PREFIX = varFile.CMD_PREFIX;
+// var AUTO_DELETE_MODE = false
+// var AUTO_DELETE_TIME = 15000
 
 var reaction_numbers = ["\u0030\u20E3","\u0031\u20E3","\u0032\u20E3","\u0033\u20E3","\u0034\u20E3","\u0035\u20E3", "\u0036\u20E3","\u0037\u20E3","\u0038\u20E3","\u0039\u20E3"]
 
@@ -38,7 +40,17 @@ logger.add(new logger.transports.Console, {
 logger.level = 'debug'
 
 // Initialize Discord Bot
-var bot = new Discord.Client()
+// const bot = new Discord.Client();
+const bot = varFile.bot;
+bot.commands = new Discord.Collection();
+
+const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+
+for (const file of commandFiles) {
+    const command = require(`./commands/${file}`);
+    bot.commands.set(command.name, command);
+}
+
 bot.on('ready', function (evt) {
     logger.info('Connected')
     logger.info('Logged in as: ')
@@ -46,12 +58,32 @@ bot.on('ready', function (evt) {
 })
 
 bot.on('message', (message) => {
+    if (!message.content.startsWith(CMD_PREFIX) || message.author.bot) return;
+
+    const args = message.content.slice(CMD_PREFIX.length).split(/ +/);
+    const command = args.shift().toLowerCase();
+    const cmd = command;
+
+    if (!bot.commands.has(command)) {
+        message.reply('This don\'t do anything. Please check your spelling. Use **' + CMD_PREFIX + 'help** for list of commands available.');
+        return;
+    };
+
+    try {
+        bot.commands.get(command).execute(message, args);
+    } catch (error) {
+        logger.error(error);
+        logger.error(error.message);
+        message.reply('There is an error with your command. Please check your spelling. Use **' + CMD_PREFIX + 'help** for list of commands available.');
+    }
+
     var channelID = message.channel.id
     // Our bot needs to know if it will execute a command
     // It will listen for messages that will start with command prefix specified in variable CMD_PREFIX declared above
-    if (message.content.substring(0, 1) == CMD_PREFIX) {
-        var args = message.content.substring(1).split(' ')
-        var cmd = args[0]
+    // if (message.content.substring(0, 1) == CMD_PREFIX) {
+    if (false) {
+        // var args = message.content.substring(1).split(' ')
+        // var cmd = args[0]
         logger.info('CMD: ' + cmd)
         logger.info('Args: ' + args)
 
@@ -108,15 +140,6 @@ bot.on('message', (message) => {
                     })
             break
             case 'ping':
-                message.channel.send('Pong! 1:0 for me')
-                    .then(msg => {
-                        if (AUTO_DELETE_MODE) {
-                            setTimeout(function () {
-                                message.delete()
-                                msg.delete()
-                            }, AUTO_DELETE_TIME)  
-                        }                              
-                    })
             break
             case COMMAND_HELP:
                 showHelp(message)
