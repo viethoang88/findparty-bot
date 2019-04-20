@@ -65,3 +65,6 @@ typings/
 
 # Token file
 auth.json
+
+# DB file
+totality.json
