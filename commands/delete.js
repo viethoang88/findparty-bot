@@ -11,8 +11,8 @@ module.exports = {
 	name: 'delete',
 	description: 'Delete ET party\n' +
 		'Command: ?delete ET ID\n' +
-		'Example: ?delete ET se42GD\n' +
-		'Notes: Only creator of party or Person with priviledge can delete party.',
+		'Example: ?delete ET se42GD 1fnj12\n' +
+		'Notes: Only creator of party or person with permissions can delete party.',
 	execute(message, args) {
 		const instance = args[0];
 		logger.info('args: ' + args);

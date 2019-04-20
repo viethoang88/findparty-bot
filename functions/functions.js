@@ -30,8 +30,8 @@ module.exports = {
 				'Example: ?leave ET se42GD (I am not feeling well)')
 			.addField('Delete ET party',
 				'Command: ?delete ET ID\n' +
-				'Example: ?delete ET se42GD\n' +
-				'Notes: Only creator of party or Person with priviledge can delete party.');
+				'Example: ?delete ET se42GD 1fnj12\n' +
+				'Notes: Only creator of party or person with permissions can delete party.');
 		message.channel.send(helpEmbed)
 			.then(msg => {
 				if (AUTO_DELETE_MODE) {
@@ -222,6 +222,7 @@ module.exports = {
 								const chanId = String(discordChannelMatch[1]);
 								logger.info(`Channel ID: ${chanId}`);
 								bot.channels.get(chanId).send(embed);
+								bot.channels.get(chanId).send('Full party moved here.');
 								msg.delete(2000)
 									.then(message.channel.send(`Full party ${newET.name} moved to ${newET.discordChannel}`));
 							}
@@ -458,19 +459,24 @@ module.exports = {
 		}
 	},
 	deleteETParty: function(message, args) {
-		const etName = args[1];
-		const et = DB.findET(etName);
+		// const etName = args[1];
+		const etNameInput = args.splice(1);
+		logger.debug("etNameInput: " + etNameInput);
 
-		if (et !== null) {
-			if (et.createdBy === message.author.id || message.member.roles.find(r => r.name === 'Admin')
-				|| message.member.roles.find(r => r.name === 'D.Moderator')
-				|| message.member.roles.find(r => r.name === 'Core')) {
-				DB.deleteET(etName);
-				message.channel.send(`ET party with ID: ${etName} was deleted by <@${message.author.id}>`);
-			} else {
-				message.channel.send('Sorry you cannot delete party created by others');
+		etNameInput.forEach(function(etName) {
+		logger.debug("etName: " + etName);
+			const et = DB.findET(etName);
+			if (et !== null) {
+				if (et.createdBy === message.author.id || message.member.roles.find(r => r.name === 'Admin')
+					|| message.member.roles.find(r => r.name === 'D.Moderator')
+					|| message.member.roles.find(r => r.name === 'Core')) {
+					DB.deleteET(etName);
+					message.channel.send(`ET party with ID: ${etName} was deleted by <@${message.author.id}>`);
+				} else {
+					message.channel.send('Sorry you cannot delete party created by others');
+				}
 			}
-		}
+		});
 	},
 	showMyETs: function(message) {
 		const results = DB.findMyETs(message.author.id);
