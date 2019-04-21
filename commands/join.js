@@ -1,6 +1,6 @@
 const varFile = require('../variables/var.js');
 const func = require('../functions/functions.js');
-const logger = require('winston');
+// const logger = require('winston');
 
 const isDefined = func.isDefined;
 const showHelp = func.showHelp;
@@ -9,12 +9,13 @@ const ET_TYPE = varFile.ET_TYPE;
 
 module.exports = {
 	name: 'join',
-	description: 'Join an ET party\n' +
-		'Command: ?join ET partyID slot#\n' +
-		'Example: ?join ET se42GD 2',
+	description: 'This command is for joining an existing ET party.',
+	format: 'ET PartyID Slot#',
+	example: 'ET se42GD 2',
+	group: 'party-finder',
 	execute(message, args) {
 		const instance = args[0];
-		logger.info('args: ' + args);
+		// logger.info('args: ' + args);
 
 		if (args.length > 0 && isDefined(instance)) {
 			switch(instance.toLowerCase()) {

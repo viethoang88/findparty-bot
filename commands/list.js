@@ -1,17 +1,20 @@
 const varFile = require('../variables/var.js');
 const func = require('../functions/functions.js');
-const logger = require('winston');
+// const logger = require('winston');
 
 module.exports = {
 	name: 'list',
-	description: 'List out all ET parties or specific party (coming soon)\nCommand: ?list ET or ?list ET ID\nExample: ?list ET se42GD',
+	description: 'This command is for listing out all ET parties',
+	format: 'ET',
+	example: 'ET ',
+	group: 'party-finder',
 	execute(message, args) {
 		const instance = args[0];
 		if (args.length > 0 && func.isDefined(instance)) {
 			switch(instance.toLowerCase()) {
 			case varFile.ET_TYPE:
 				var results = varFile.DB.findAllET();
-				logger.debug(`Found ETs: ${results}`);
+				// logger.debug(`Found ETs: ${results}`);
 				func.displayLFPETResults(message, results);
 				break;
 			}

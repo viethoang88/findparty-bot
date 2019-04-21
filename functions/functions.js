@@ -1,6 +1,6 @@
 const varFile = require('../variables/var.js');
 const Discord = require('discord.js');
-const logger = require('winston');
+// const logger = require('winston');
 
 const bot = varFile.bot;
 const DB = varFile.DB;
@@ -124,7 +124,7 @@ module.exports = {
 		const discordChannelMatches = String(args).match(/\<(.*?)\>/);
 		let discordChannel;
 		if (discordChannelMatches) {
-			logger.debug(`DISCORD CHANNEL: ${discordChannelMatches}`);
+			// logger.debug(`DISCORD CHANNEL: ${discordChannelMatches}`);
 			discordChannel = '<' + discordChannelMatches[1] + '>';
 		}
 
@@ -142,7 +142,7 @@ module.exports = {
 				roles.push(allRoles[4]);
 			}
 		}
-		logger.info(`roles: ${roles}`);
+		// logger.info(`roles: ${roles}`);
 
 		const newET = DB.createET(message.author.id, customId, dateTime, romChannel, discordChannel, roles);
 		const embed = new Discord.RichEmbed()
@@ -169,8 +169,8 @@ module.exports = {
 		const role = args[2];
 		const user = args[3];
 
-		logger.debug('role: ' + role);
-		logger.debug('user: ' + user);
+		// logger.debug('role: ' + role);
+		// logger.debug('user: ' + user);
 		if (role !== undefined && user !== undefined) {
 			const etName = args[1];
 			const etParty = DB.findET(etName);
@@ -179,7 +179,7 @@ module.exports = {
 				const userTagMatches = String(args).match(/\<\@(.*?)\>/);
 				let userId;
 				if (userTagMatches) {
-					logger.debug(`USER ID FROM TAG: ${userTagMatches}`);
+					// logger.debug(`USER ID FROM TAG: ${userTagMatches}`);
 					userId = userTagMatches[1];
 				}
 
@@ -216,11 +216,11 @@ module.exports = {
 
 					message.channel.send(embed).then(msg => {
 						if (newET.role1User !== null && newET.role2User !== null && newET.role3User !== null && newET.role4User !== null && newET.role5User !== null) {
-							logger.info('Saved discord ID: ' + newET.discordChannel);
+							// logger.info('Saved discord ID: ' + newET.discordChannel);
 							const discordChannelMatch = String(newET.discordChannel).match(/\<\#(.*?)\>/);
 							if (discordChannelMatch) {
 								const chanId = String(discordChannelMatch[1]);
-								logger.info(`Channel ID: ${chanId}`);
+								// logger.info(`Channel ID: ${chanId}`);
 								bot.channels.get(chanId).send(embed);
 								bot.channels.get(chanId).send('Full party moved here.');
 								msg.delete(2000)
@@ -248,7 +248,7 @@ module.exports = {
 		let etParty = DB.findET(etName);
 
 		if (etParty !== null) {
-			logger.info(`ET: ${etParty}`);
+			// logger.info(`ET: ${etParty}`);
 			let canJoin = false;
 			let duplicate = false;
 
@@ -355,7 +355,7 @@ module.exports = {
 			}
 
 			if (canJoin && !duplicate) {
-				logger.info('can join & not duplicate');
+				// logger.info('can join & not duplicate');
 				let newET = DB.updateET(etParty);
 				message.channel.send(`<@${message.author.id}> just joined ${etName}`)
 					.then(msg => {
@@ -377,7 +377,7 @@ module.exports = {
 				message.channel.send(embed).then(msg => {
 					// if (newET.role1User !== null) { testing purpose
 					if (newET.role1User !== null && newET.role2User !== null && newET.role3User !== null && newET.role4User !== null && newET.role5User !== null) {
-						logger.info('Saved discord ID: ' + newET.discordChannel);
+						// logger.info('Saved discord ID: ' + newET.discordChannel);
 						const discordChannelMatch = String(newET.discordChannel).match(/\<\#(.*?)\>/);
 						if (discordChannelMatch) {
 							const chanId = String(discordChannelMatch[1]);
@@ -389,10 +389,10 @@ module.exports = {
 					}
 				});
 			} else if (duplicate) {
-				logger.info('duplicate');
+				// logger.info('duplicate');
 				message.channel.send(`OMG ${message.author.username}! You already joined.`);
 			} else if (!etParty.queue.includes(message.author.id)) {
-				logger.info('not in queue');
+				// logger.info('not in queue');
 				etParty.queue.push(message.author.id);
 				const newET = DB.updateET(etParty);
 				let queueText;
@@ -414,7 +414,7 @@ module.exports = {
 				message.channel.send(embed);
 				message.channel.send(`Sorry ${message.author.username} all slots are taken. You have been added as to queue.`);
 			} else {
-				logger.info('in queue');
+				// logger.info('in queue');
 				message.channel.send('You are already in queue.');
 			}
 
@@ -461,10 +461,10 @@ module.exports = {
 	deleteETParty: function(message, args) {
 		// const etName = args[1];
 		const etNameInput = args.splice(1);
-		logger.debug("etNameInput: " + etNameInput);
+		// logger.debug("etNameInput: " + etNameInput);
 
 		etNameInput.forEach(function(etName) {
-		logger.debug("etName: " + etName);
+		// logger.debug("etName: " + etName);
 			const et = DB.findET(etName);
 			if (et !== null) {
 				if (et.createdBy === message.author.id || message.member.roles.find(r => r.name === 'Admin')

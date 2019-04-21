@@ -1,20 +1,23 @@
 const varFile = require('../variables/var.js');
 const func = require('../functions/functions.js');
-const logger = require('winston');
+// const logger = require('winston');
 
 const isDefined = func.isDefined;
 const showHelp = func.showHelp;
 const addETUser = func.addETUser;
 const ET_TYPE = varFile.ET_TYPE;
+const prefix = varFile.CMD_PREFIX;
 
 module.exports = {
 	name: 'add',
-	description: 'Add others to ET party\n' +
-		'Command: ?add ET partyID slot# @person\n' +
-		'Example: ?add ET se42GD 2 @SilvStar',
+	description: 'This command is for adding others to an existing ET party.',
+	format: 'ET partyID slot# @person',
+	example: 'ET se42GD 2 @SilvStar',
+	group: 'party-finder',
+	// usage: '<ET> <PartyID:string> <SlotNo:int{1,5}> ]',
 	execute(message, args) {
 		const instance = args[0];
-		logger.info('args: ' + args);
+		// logger.info('args: ' + args);
 
 		if (args.length > 0 && isDefined(instance)) {
 			switch(instance.toLowerCase()) {
