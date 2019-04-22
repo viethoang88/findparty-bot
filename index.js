@@ -59,8 +59,8 @@ bot.on('message', (message) => {
     try {
         bot.commands.get(command).execute(message, args);
     } catch (error) {
-        // logger.error(error);
-        // logger.error(error.message);
+        logger.error(error);
+        logger.error(error.message);
         message.reply('There is an error with your command. Please check your spelling. Use **' + CMD_PREFIX + 'help** for list of commands available.');
     }
 
