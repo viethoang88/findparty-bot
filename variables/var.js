@@ -4,7 +4,7 @@ const DBModule = require('../db.js');
 module.exports = {
 	bot: new Discord.Client(),
 	DB: new DBModule(),
-	CMD_PREFIX: '.',
+	CMD_PREFIX: '-',
 	prefix: this.CMD_PREFIX,
 	ET_TYPE: 'et',
 	ORACLE_TYPE: 'oracle',
