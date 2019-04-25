@@ -191,7 +191,7 @@ module.exports = {
 		if (etParty != null) {
 			if ((etParty.role1Name === "ANY" && etParty.role1User === null) || (etParty.role2Name === "ANY" && etParty.role2User === null) || (etParty.role3Name === "ANY" && etParty.role3User === null)
 			|| (etParty.role4Name === "ANY" && etParty.role4User === null) || (etParty.role5Name === "ANY" && etParty.role5User === null)) {
-				tags += `@everyone`
+				tags += `<@&${varFile.TANK_ROLE_ID}>, <@&${varFile.HEALS_ROLE_ID}>, <@&${varFile.WIZ_ROLE_ID}>, <@&${varFile.RANGE_DPS_ROLE_ID}>, <@&${varFile.MEELEE_DPS_ROLE_ID}>`
 				message.channel.send(tags)
 				return 
 			}
@@ -199,39 +199,41 @@ module.exports = {
 			if ((etParty.role1Name === "TANK" && etParty.role1User === null) || (etParty.role2Name === "TANK" && etParty.role2User === null) || (etParty.role3Name === "TANK" && etParty.role3User === null)
 			|| (etParty.role4Name === "TANK" && etParty.role4User === null) || (etParty.role5Name === "TANK" && etParty.role5User === null)) {
 				if (tags.length == 0) {
-					tags += `@Tank`
+					tags += `<@&${varFile.TANK_ROLE_ID}>`
 				} else {
-					tags += `, @Tank`
+					tags += `, <@&${varFile.TANK_ROLE_ID}>`
 				}
 			}
 
 			if ((etParty.role1Name === "PRIEST" && etParty.role1User === null) || (etParty.role2Name === "PRIEST" && etParty.role2User === null) || (etParty.role3Name === "PRIEST" && etParty.role3User === null)
 			|| (etParty.role4Name === "PRIEST" && etParty.role4User === null) || (etParty.role5Name === "PRIEST" && etParty.role5User === null)) {
 				if (tags.length == 0) {
-					tags += `@Heals`
+					tags += `<@&${varFile.HEALS_ROLE_ID}>`
 				} else {
-					tags += `, @Heals`
-				}
-			}
-
-			if ((etParty.role1Name === "WIZ" && etParty.role1User === null) || (etParty.role2Name === "WIZ" && etParty.role2User === null) || (etParty.role3Name === "WIZ" && etParty.role3User === null)
-			|| (etParty.role4Name === "WIZ" && etParty.role4User === null) || (etParty.role5Name === "WIZ" && etParty.role5User === null)) {
-				if (tags.length == 0) {
-					tags += `@Wiz`
-				} else {
-					tags += `, @Wiz`
+					tags += `, <@&${varFile.HEALS_ROLE_ID}>`
 				}
 			}
 
 			if ((etParty.role1Name === "DPS" && etParty.role1User === null) || (etParty.role2Name === "DPS" && etParty.role2User === null) || (etParty.role3Name === "DPS" && etParty.role3User === null)
 			|| (etParty.role4Name === "DPS" && etParty.role4User === null) || (etParty.role5Name === "DPS" && etParty.role5User === null)) {
 				if (tags.length == 0) {
-					tags += `@Meelee DPS, @Range DPS`
+					tags += `<@&${varFile.MEELEE_DPS_ROLE_ID}>, <@&${varFile.RANGE_DPS_ROLE_ID}>, <@&${varFile.WIZ_ROLE_ID}>`
 				} else {
-					tags += `, @Meelee DPS, @Range DPS`
+					tags += `, <@&${varFile.MEELEE_DPS_ROLE_ID}>, <@&${varFile.RANGE_DPS_ROLE_ID}>, <@&${varFile.WIZ_ROLE_ID}>`
 				}
 			}
 
+			if (tags.indexOf(varFile.WIZ_ROLE_ID) == -1) {
+				if ((etParty.role1Name === "WIZ" && etParty.role1User === null) || (etParty.role2Name === "WIZ" && etParty.role2User === null) || (etParty.role3Name === "WIZ" && etParty.role3User === null)
+				|| (etParty.role4Name === "WIZ" && etParty.role4User === null) || (etParty.role5Name === "WIZ" && etParty.role5User === null)) {
+					if (tags.length == 0) {
+						tags += `<@&${varFile.WIZ_ROLE_ID}>`
+					} else {
+						tags += `, <@&${varFile.WIZ_ROLE_ID}>`
+					}
+				}
+			}
+		
 			message.channel.send(tags)
 		}
 	},
