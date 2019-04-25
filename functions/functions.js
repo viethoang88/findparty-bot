@@ -51,7 +51,8 @@ module.exports = {
 		}
 	},
 	displayLFPETResults: function(message, results) {
-		message.channel.send(`There are ${results.length} created ET parties`)
+		if (results.length == 0) {
+			message.channel.send(`There are no newly created ET parties`)
 			.then(msg => {
 				if (AUTO_DELETE_MODE) {
 					setTimeout(function() {
@@ -60,9 +61,23 @@ module.exports = {
 					}, AUTO_DELETE_TIME);
 				}
 			});
+		} else {
+			message.channel.send(`There are ${results.length} newly created ET parties`)
+			.then(msg => {
+				if (AUTO_DELETE_MODE) {
+					setTimeout(function() {
+						message.delete();
+						msg.delete();
+					}, AUTO_DELETE_TIME);
+				}
+			});
+		}
+		
 
 		results.forEach(et => {
-			this.displayLFPResult(message, et, ET_TYPE);
+			if (et.status === "OPEN") {
+				this.displayLFPResult(message, et, ET_TYPE);
+			}
 		});
 	},
 	displayLFPResult: function(message, result, type) {
@@ -167,6 +182,59 @@ module.exports = {
 				}
 			});
 	},
+	lfmET: function(message, args) {
+		const etName = args[1];
+		const etParty = DB.findET(etName);
+
+		var tags = ``
+
+		if (etParty != null) {
+			if ((etParty.role1Name === "ANY" && etParty.role1User === null) || (etParty.role2Name === "ANY" && etParty.role2User === null) || (etParty.role3Name === "ANY" && etParty.role3User === null)
+			|| (etParty.role4Name === "ANY" && etParty.role4User === null) || (etParty.role5Name === "ANY" && etParty.role5User === null)) {
+				tags += `@everyone`
+				message.channel.send(tags)
+				return 
+			}
+
+			if ((etParty.role1Name === "TANK" && etParty.role1User === null) || (etParty.role2Name === "TANK" && etParty.role2User === null) || (etParty.role3Name === "TANK" && etParty.role3User === null)
+			|| (etParty.role4Name === "TANK" && etParty.role4User === null) || (etParty.role5Name === "TANK" && etParty.role5User === null)) {
+				if (tags.length == 0) {
+					tags += `@Tank`
+				} else {
+					tags += `, @Tank`
+				}
+			}
+
+			if ((etParty.role1Name === "PRIEST" && etParty.role1User === null) || (etParty.role2Name === "PRIEST" && etParty.role2User === null) || (etParty.role3Name === "PRIEST" && etParty.role3User === null)
+			|| (etParty.role4Name === "PRIEST" && etParty.role4User === null) || (etParty.role5Name === "PRIEST" && etParty.role5User === null)) {
+				if (tags.length == 0) {
+					tags += `@Heals`
+				} else {
+					tags += `, @Heals`
+				}
+			}
+
+			if ((etParty.role1Name === "WIZ" && etParty.role1User === null) || (etParty.role2Name === "WIZ" && etParty.role2User === null) || (etParty.role3Name === "WIZ" && etParty.role3User === null)
+			|| (etParty.role4Name === "WIZ" && etParty.role4User === null) || (etParty.role5Name === "WIZ" && etParty.role5User === null)) {
+				if (tags.length == 0) {
+					tags += `@Wiz`
+				} else {
+					tags += `, @Wiz`
+				}
+			}
+
+			if ((etParty.role1Name === "DPS" && etParty.role1User === null) || (etParty.role2Name === "DPS" && etParty.role2User === null) || (etParty.role3Name === "DPS" && etParty.role3User === null)
+			|| (etParty.role4Name === "DPS" && etParty.role4User === null) || (etParty.role5Name === "DPS" && etParty.role5User === null)) {
+				if (tags.length == 0) {
+					tags += `@Meelee DPS, @Range DPS`
+				} else {
+					tags += `, @Meelee DPS, @Range DPS`
+				}
+			}
+
+			message.channel.send(tags)
+		}
+	},
 	addETUser: function(message, args) {
 		const role = args[2];
 		const user = args[3];
@@ -178,7 +246,7 @@ module.exports = {
 			const etParty = DB.findET(etName);
 
 			if (etParty !== null) {
-				const userTagMatches = String(args).match(/\<\@\!(.*?)\>/);
+				const userTagMatches = String(args).replace('\!', '').match(/\<\@(.*?)\>/);
 				let userId;
 				if (userTagMatches) {
 					// logger.debug(`USER ID FROM TAG: ${userTagMatches}`);
@@ -230,6 +298,8 @@ module.exports = {
 					message.channel.send(embed).then(msg => {
 						if (newET.role1User !== null && newET.role2User !== null && newET.role3User !== null && newET.role4User !== null && newET.role5User !== null) {
 							// logger.info(`Saved discord ID: ` + newET.discordChannel);
+							newET.status = "FULL"
+							DB.updateET(ET)
 							const discordChannelMatch = String(newET.discordChannel).match(/\<\#(.*?)\>/);
 							if (discordChannelMatch) {
 								const chanId = String(discordChannelMatch[1]);
@@ -247,6 +317,54 @@ module.exports = {
 			}
 		} else {
 			message.channel.send(`Command not used correctly. Please check that role number is 1-5 and also tag the user accordingly.`);
+		}
+	},
+	removeETUser: function(message, args) {
+		const role = args[2];
+		const user = args[3];
+
+		// logger.debug(`role: ` + role);
+		// logger.debug(`user: ` + user);
+		if (role !== null && user !== null) {
+			const etName = args[1];
+			const etParty = DB.findET(etName);
+
+			if (etParty !== null) {
+				switch(role) {
+				case `1`:
+					etParty.role1User = null;
+					break;
+				case `2`:
+					etParty.role2User = null;
+					break;
+				case `3`:
+					etParty.role3User = null;
+					break;
+				case `4`:
+					etParty.role4User = null;
+					break;
+				case `5`:
+					etParty.role5User = null;
+					break;
+				}
+
+				const newET = DB.updateET(etParty);
+
+				const embed = new Discord.RichEmbed()
+					.setTitle(`ET ID:${newET.name} [${newET.date}] (${newET.romChannel})`)
+					.setColor(newET.color)
+					.setDescription(`${newET.discordChannel}`)
+					.addField(`1. ${newET.role1Name}`, newET.role1User === null ? `Empty` : `<@` + newET.role1User + `>`)
+					.addField(`2. ${newET.role2Name}`, newET.role2User === null ? `Empty` : `<@` + newET.role2User + `>`)
+					.addField(`3. ${newET.role3Name}`, newET.role3User === null ? `Empty` : `<@` + newET.role3User + `>`)
+					.addField(`4. ${newET.role4Name}`, newET.role4User === null ? `Empty` : `<@` + newET.role4User + `>`)
+					.addField(`5. ${newET.role5Name}`, newET.role5User === null ? `Empty` : `<@` + newET.role5User + `>`);
+				// message.channel.send(embed);
+
+					message.channel.send(embed).then(msg => {
+						
+					});
+			}
 		}
 	},
 	joinET: function(message, args) {
@@ -391,6 +509,8 @@ module.exports = {
 					// if (newET.role1User !== null) { testing purpose
 					if (newET.role1User !== null && newET.role2User !== null && newET.role3User !== null && newET.role4User !== null && newET.role5User !== null) {
 						// logger.info(`Saved discord ID: ` + newET.discordChannel);
+						newET.status = "FULL"
+						DB.updateET(ET)
 						const discordChannelMatch = String(newET.discordChannel).match(/\<\#(.*?)\>/);
 						if (discordChannelMatch) {
 							const chanId = String(discordChannelMatch[1]);
@@ -512,6 +632,8 @@ module.exports = {
 					// if (newET.role1User !== null) { testing purpose
 					if (newET.role1User !== null && newET.role2User !== null && newET.role3User !== null && newET.role4User !== null && newET.role5User !== null) {
 						// logger.info(`Saved discord ID: ` + newET.discordChannel);
+						newET.status = "FULL"
+						DB.updateET(ET)
 						const discordChannelMatch = String(newET.discordChannel).match(/\<\#(.*?)\>/);
 						if (discordChannelMatch) {
 							const chanId = String(discordChannelMatch[1]);
@@ -555,6 +677,10 @@ module.exports = {
 
 			if (et.role5User && et.role5User === message.author.id) {
 				et.role5User = null;
+			}
+
+			if (et.status === "FULL") {
+				et.status = "OPEN"
 			}
 
 			DB.updateET(et);
@@ -606,4 +732,42 @@ module.exports = {
 			message.channel.send(embed);
 		});
 	},
+	moveET: function(message, args) {
+		// const etName = args[1];
+		const etNameInput = args.splice(1);
+		// logger.debug("etNameInput: " + etNameInput);
+
+		etNameInput.forEach(function(etName) {
+		// logger.debug("etName: " + etName);
+			const et = DB.findET(etName);
+			if (et !== null) {
+				if (et.createdBy === message.author.id || message.member.roles.find(r => r.name === `Admin`)
+					|| message.member.roles.find(r => r.name === `D.Moderator`)
+					|| message.member.roles.find(r => r.name === `Core`)) {
+					et.status = "FULL"
+					var newET = DB.updateET(et)
+					const embed = new Discord.RichEmbed()
+						.setTitle(`ET ID:${newET.name} [${newET.date}] (${newET.romChannel})`)
+						.setColor(newET.color)
+						.setDescription(`${newET.discordChannel}`)
+						.addField(`1. ${newET.role1Name}`, newET.role1User === null ? `Empty` : `<@` + newET.role1User + `>`)
+						.addField(`2. ${newET.role2Name}`, newET.role2User === null ? `Empty` : `<@` + newET.role2User + `>`)
+						.addField(`3. ${newET.role3Name}`, newET.role3User === null ? `Empty` : `<@` + newET.role3User + `>`)
+						.addField(`4. ${newET.role4Name}`, newET.role4User === null ? `Empty` : `<@` + newET.role4User + `>`)
+						.addField(`5. ${newET.role5Name}`, newET.role5User === null ? `Empty` : `<@` + newET.role5User + `>`);
+					const discordChannelMatch = String(newET.discordChannel).match(/\<\#(.*?)\>/);
+					if (discordChannelMatch) {
+						const chanId = String(discordChannelMatch[1]);
+						// logger.info(`Channel ID: ${chanId}`);
+						bot.channels.get(chanId).send(embed);
+						message.channel.send(`Party ${newET.name} moved to ${newET.discordChannel}`).then(msg => {
+							msg.delete(2000)
+						})
+					}
+				} else {
+					message.channel.send(`Sorry you cannot move party.`);
+				}
+			}
+		});
+	}
 };

@@ -16,6 +16,7 @@ const COMMAND_DELETE = 'delete';
 const COMMAND_LEAVE = 'leave';
 
 var CMD_PREFIX = varFile.CMD_PREFIX;
+var AUTO_DELETE_COMMANDS = varFile.AUTO_DELETE_COMMANDS;
 
 var reaction_numbers = ["\u0030\u20E3","\u0031\u20E3","\u0032\u20E3","\u0033\u20E3","\u0034\u20E3","\u0035\u20E3", "\u0036\u20E3","\u0037\u20E3","\u0038\u20E3","\u0039\u20E3"]
 
@@ -58,6 +59,9 @@ bot.on('message', (message) => {
 
     try {
         bot.commands.get(command).execute(message, args);
+        if (AUTO_DELETE_COMMANDS) {
+            message.delete();
+        }
     } catch (error) {
         logger.error(error);
         logger.error(error.message);

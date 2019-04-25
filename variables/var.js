@@ -15,5 +15,6 @@ module.exports = {
 	VAL_80_TYPE: 'val80',
 	VAL_100_TYPE: 'val100',
 	AUTO_DELETE_MODE: false,
+	AUTO_DELETE_COMMANDS: true,
 	AUTO_DELETE_TIME: 15000,
 };

@@ -36,7 +36,7 @@ class DBModule {
   }
 
   findAllET() {
-    return etDB.find()
+    return etDB.find({status: "OPEN"})
   }
 
   findMyETs(userId) {
@@ -78,6 +78,7 @@ class DBModule {
           role5Name: roles[4],
           role5User: null,
           role5Alt: false,
+          status: "OPEN",
           queue: []
         }
     } else {
@@ -103,6 +104,7 @@ class DBModule {
             role5Name: 'DPS',
             role5User: null,
             role5Alt: false,
+            status: "OPEN",
             queue: []
           }
     } 
