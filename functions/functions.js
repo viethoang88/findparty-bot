@@ -143,6 +143,7 @@ module.exports = {
 				roles.push(allRoles[4]);
 			}
 		}
+
 		// logger.info(`roles: ${roles}`);
 
 		const newET = DB.createET(message.author.id, customId, dateTime, romChannel, discordChannel, roles);
@@ -177,11 +178,22 @@ module.exports = {
 			const etParty = DB.findET(etName);
 
 			if (etParty !== null) {
-				const userTagMatches = String(args).match(/\<\@(.*?)\>/);
+				const userTagMatches = String(args).match(/\<\@\!(.*?)\>/);
 				let userId;
 				if (userTagMatches) {
 					// logger.debug(`USER ID FROM TAG: ${userTagMatches}`);
 					userId = userTagMatches[1];
+				}
+
+				var duplicate = false;
+				if (etParty.role1User == userId || etParty.role2User == userId || etParty.role3User == userId || etParty.role4User == userId
+					|| etParty.role5User == userId) {
+					duplicate = true;
+				}
+
+				if (duplicate) {
+					message.channel.send(`Sorry <@${userId}> already joined.`);
+					return
 				}
 
 				if (userId !== null) {
