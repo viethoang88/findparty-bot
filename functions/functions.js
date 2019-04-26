@@ -166,7 +166,7 @@ module.exports = {
 		}
 
 		// DISCORD CHANNEL IS IN <> brackets
-		const discordChannelMatches = String(args).match(/\<(.*?)\>$/);
+		const discordChannelMatches = String(args).match(/\<(\<.*?\>)\>/);
 		let discordChannel;
 		if (discordChannelMatches) {
 			// logger.debug(`DISCORD CHANNEL: ${discordChannelMatches}`);
