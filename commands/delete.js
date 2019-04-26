@@ -22,6 +22,10 @@ module.exports = {
 			case ET_TYPE:
 				deleteETParty(message, args);
 				break;
+			default:
+				// message.channel.send(instance + ' does not exists. Please use ET, Oracle, MVP, BQRIFT, ANY')
+				message.channel.send('Please use ' + varFile.CMD_PREFIX + 'delete **ET** PartyID.');
+				break;
 			}
 		} else if (isDefined(instance) === false) {
 			message.channel.send('Opps, there is a problem processing your request. Please check your format.');
