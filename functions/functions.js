@@ -473,10 +473,10 @@ module.exports = {
 						return;
 					}
 
-					if (etParty.role2User === message.author.id || etParty.role3User === message.author.id || etParty.role4User === message.author.id
-					|| etParty.role5User === message.author.id) {
-						duplicate = true;
-					}
+					// if (etParty.role2User === message.author.id || etParty.role3User === message.author.id || etParty.role4User === message.author.id
+					// || etParty.role5User === message.author.id) {
+					// 	duplicate = true;
+					// }
 				}
 
 				if (etParty.role2Name !== null && role === `2`) {
@@ -488,10 +488,10 @@ module.exports = {
 						return;
 					}
 
-					if (etParty.role1User === message.author.id || etParty.role3User === message.author.id || etParty.role4User === message.author.id
-					|| etParty.role5User === message.author.id) {
-						duplicate = true;
-					}
+					// if (etParty.role1User === message.author.id || etParty.role3User === message.author.id || etParty.role4User === message.author.id
+					// || etParty.role5User === message.author.id) {
+					// 	duplicate = true;
+					// }
 				}
 
 				if (etParty.role3Name !== null && role === `3`) {
@@ -503,10 +503,10 @@ module.exports = {
 						return;
 					}
 
-					if (etParty.role1User === message.author.id || etParty.role2User === message.author.id || etParty.role4User === message.author.id
-					|| etParty.role5User === message.author.id) {
-						duplicate = true;
-					}
+					// if (etParty.role1User === message.author.id || etParty.role2User === message.author.id || etParty.role4User === message.author.id
+					// || etParty.role5User === message.author.id) {
+					// 	duplicate = true;
+					// }
 				}
 
 				if (etParty.role4Name !== null && role === `4`) {
@@ -518,10 +518,10 @@ module.exports = {
 						return;
 					}
 
-					if (etParty.role1User === message.author.id || etParty.role2User === message.author.id || etParty.role3User === message.author.id
-					|| etParty.role5User === message.author.id) {
-						duplicate = true;
-					}
+					// if (etParty.role1User === message.author.id || etParty.role2User === message.author.id || etParty.role3User === message.author.id
+					// || etParty.role5User === message.author.id) {
+					// 	duplicate = true;
+					// }
 				}
 
 				if (etParty.role5Name !== null && role === `5`) {
@@ -532,14 +532,15 @@ module.exports = {
 						message.channel.send(`Sorry you cannot just replace someone like that.`);
 						return;
 					}
-					if (etParty.role1User === message.author.id || etParty.role2User === message.author.id || etParty.role3User === message.author.id
-					|| etParty.role4User === message.author.id) {
-						duplicate = true;
-					}
+					// if (etParty.role1User === message.author.id || etParty.role2User === message.author.id || etParty.role3User === message.author.id
+					// || etParty.role4User === message.author.id) {
+					// 	duplicate = true;
+					// }
 				}
 			}
 
-			if (canJoin && !duplicate) {
+			// if (canJoin && !duplicate) {
+			if (canJoin) {
 				// logger.info(`can join & not duplicate`);
 				let newET = DB.updateET(etParty);
 				message.channel.send(`<@${message.author.id}> just joined ${etName}`)
@@ -567,9 +568,9 @@ module.exports = {
 						}
 					}
 				});
-			} else if (duplicate) {
+			// } else if (duplicate) {
 				// logger.info(`duplicate`);
-				message.channel.send(`OMG ${message.author.username}! You already joined.`);
+				// message.channel.send(`OMG ${message.author.username}! You already joined.`);
 			} else if (!etParty.queue.includes(message.author.id)) {
 				// logger.info(`not in queue`);
 				etParty.queue.push(message.author.id);
@@ -596,6 +597,7 @@ module.exports = {
 		const role = args[2];
 		const discordUserMatches = String(args[3]).match(/\<\@(.*?)\>/);
 		let user;
+		const alt = args[4];
 		if (discordUserMatches) {
 			// logger.debug(`DISCORD CHANNEL: ${discordUserMatches}`);
 			user = discordUserMatches[1];
@@ -606,50 +608,64 @@ module.exports = {
 			const etParty = DB.findET(etName);
 
 			if (etParty !== null) {
-				logger.info(`User: ${user}`);
+				// logger.info(`User: ${user}`);
 				var previousUser;
 				var previousRoleName;
 
 				var duplicate = false;
-				if (etParty.role1User === user || etParty.role2User === user || etParty.role3User === user || etParty.role4User === user
-					|| etParty.role5User === user) {
-					duplicate = true;
-				}
+				// if (etParty.role1User === user || etParty.role2User === user || etParty.role3User === user || etParty.role4User === user
+				// 	|| etParty.role5User === user) {
+				// 	duplicate = true;
+				// }
 
-				if (duplicate) {
-					message.channel.send(`Sorry <@${user}> already joined.`);
-					return;
-				}
+				// if (duplicate) {
+				// 	message.channel.send(`Sorry <@${user}> already joined.`);
+				// 	return;
+				// }
 
 				if (etParty.role1Name !== null && role === '1') {
 					previousUser = etParty.role1User;
 					previousRoleName = etParty.role1Name;
 					etParty.role1User = user;
-
+					if (alt != null || alt != undefined) {
+						etParty.role1Alt = true
+					}
 				}
 
 				if (etParty.role2Name !== null && role === '2') {
 					previousUser = etParty.role2User;
 					previousRoleName = etParty.role2Name;
 					etParty.role2User = user;
+					if (alt != null || alt != undefined) {
+						etParty.role2Alt = true
+					}
 				}
 
 				if (etParty.role3Name !== null && role === '3') {
 					previousUser = etParty.role3User;
 					previousRoleName = etParty.role3Name;
 					etParty.role3User = user;
+					if (alt != null || alt != undefined) {
+						etParty.role3Alt = true
+					}
 				}
 
 				if (etParty.role4Name !== null && role === '4') {
 					previousUser = etParty.role4User;
 					previousRoleName = etParty.role4Name;
 					etParty.role4User = user;
+					if (alt != null || alt != undefined) {
+						etParty.role4Alt = true
+					}
 				}
 
 				if (etParty.role5Name !== null && role === '5') {
 					previousUser = etParty.role5User;
 					previousRoleName = etParty.role5Name;
 					etParty.role5User = user;
+					if (alt != null || alt != undefined) {
+						etParty.role5Alt = true
+					}
 				}
 
 				let newET = DB.updateET(etParty);
