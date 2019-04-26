@@ -414,6 +414,8 @@ module.exports = {
 				message.channel.send(embed).then(msg => {
 					
 				});
+			} else {
+				message.channel.send(`No ET Party found for ID: ${etName}`);
 			}
 		} else {
 			message.channel.send('Please check that PartyID & Slot# are stated in your command. E.g. ' + prefix + 'remove ET **12345 2**');
