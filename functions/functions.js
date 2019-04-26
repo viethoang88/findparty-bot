@@ -1,6 +1,6 @@
-const varFile = require(`../variables/var.js`);
-const Discord = require(`discord.js`);
-const logger = require(`winston`);
+const varFile = require('../variables/var.js');
+const Discord = require('discord.js');
+const logger = require('winston');
 
 const bot = varFile.bot;
 const DB = varFile.DB;
@@ -103,33 +103,33 @@ module.exports = {
 				.setTitle(`ET ID: ${model.name} | [${model.date}] (${model.romChannel})`)
 				.setColor(model.color)
 				.setDescription(`${model.discordChannel}`)
-				.setAuthor(`${bot.users.get(model.createdBy).username}`, `${bot.users.get(model.createdBy).avatarURL}`)
+				.setAuthor(`${bot.users.get(model.createdBy).username}`, `${bot.users.get(model.createdBy).avatarURL}`);
 				if (model.role1Alt) {
-					embed.addField(`1. ${model.role1Name}`, model.role1User === null ? `Empty` : `<@${model.role1User}> - ALT`)
+					embed.addField(`1. ${model.role1Name}`, model.role1User === null ? `Empty` : `<@${model.role1User}> - ALT`);
 				} else {
 					embed.addField(`1. ${model.role1Name}`, model.role1User === null ? `Empty` : `<@${model.role1User}>`)
 				}
 
 				if (model.role2Alt) {
-					embed.addField(`2. ${model.role2Name}`, model.role2User === null ? `Empty` : `<@${model.role2User}> - ALT`)
+					embed.addField(`2. ${model.role2Name}`, model.role2User === null ? `Empty` : `<@${model.role2User}> - ALT`);
 				} else {
 					embed.addField(`2. ${model.role2Name}`, model.role2User === null ? `Empty` : `<@${model.role2User}>`)
 				}
 
 				if (model.role3Alt) {
-					embed.addField(`3. ${model.role3Name}`, model.role3User === null ? `Empty` : `<@${model.role3User}> - ALT`)
+					embed.addField(`3. ${model.role3Name}`, model.role3User === null ? `Empty` : `<@${model.role3User}> - ALT`);
 				} else {
 					embed.addField(`3. ${model.role3Name}`, model.role3User === null ? `Empty` : `<@${model.role3User}>`)
 				}
 
 				if (model.role4Alt) {
-					embed.addField(`4. ${model.role4Name}`, model.role4User === null ? `Empty` : `<@${model.role4User}> - ALT`)
+					embed.addField(`4. ${model.role4Name}`, model.role4User === null ? `Empty` : `<@${model.role4User}> - ALT`);
 				} else {
 					embed.addField(`4. ${model.role4Name}`, model.role4User === null ? `Empty` : `<@${model.role4User}>`)
 				}
 
 				if (model.role5Alt) {
-					embed.addField(`5. ${model.role5Name}`, model.role5User === null ? `Empty` : `<@${model.role5User}> - ALT`)
+					embed.addField(`5. ${model.role5Name}`, model.role5User === null ? `Empty` : `<@${model.role5User}> - ALT`);
 				} else {
 					embed.addField(`5. ${model.role5Name}`, model.role5User === null ? `Empty` : `<@${model.role5User}>`)
 				}
@@ -151,6 +151,9 @@ module.exports = {
 		let dateTime;
 		if (dateMatches) {
 			dateTime = dateMatches[1].replace(new RegExp(`,`, `g`), ` `);
+		} else {
+			message.channel.send('Please specify the date and time in [ ] brackets in the command.');
+			return;
 		}
 
 		// ROM CHANNEL IS IN () brackets
@@ -158,14 +161,19 @@ module.exports = {
 		let romChannel;
 		if (romChannelMatches) {
 			romChannel = romChannelMatches[1];
+		} else {
+			romChannel = 'Channel TBC';
 		}
 
 		// DISCORD CHANNEL IS IN <> brackets
-		const discordChannelMatches = String(args).match(/\<(.*?)\>/);
+		const discordChannelMatches = String(args).match(/\<(.*?)\>$/);
 		let discordChannel;
 		if (discordChannelMatches) {
 			// logger.debug(`DISCORD CHANNEL: ${discordChannelMatches}`);
-			discordChannel = `<` + discordChannelMatches[1] + `>`;
+			discordChannel = '<' + discordChannelMatches[1] + '>';
+		} else {
+			message.channel.send('Please specify an existing discord channel in < > brackets in the command. E.g. <#et-1>');
+			return;
 		}
 
 		// CUSTOM ROLES ARE IN BETWEEN $$
@@ -210,7 +218,7 @@ module.exports = {
 		const etName = args[1];
 		const etParty = DB.findET(etName);
 
-		var tags = ``
+		var tags = '';
 
 		if (etParty.role1User !== null && etParty.role2User !== null && etParty.role3User !== null && etParty.role4User !== null && etParty.role5User !== null) {
 			// PARTY IS FULL 
