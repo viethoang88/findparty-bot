@@ -44,7 +44,7 @@ module.exports = {
 		return helpEmbed;
 	},
 	isDefined: function(variable) {
-		if (typeof variable === `undefined` || variable === null) {
+		if (typeof variable === 'undefined' || variable === null) {
 			return false;
 		} else {
 			return true;
@@ -590,19 +590,19 @@ module.exports = {
 	},
 	replaceETrole: function(message, args) {
 		const role = args[2];
-		const discordChannelMatches = String(args[3]).match(/\<\@(.*?)\>/);
-		var user;
-		if (discordChannelMatches) {
-			// logger.debug(`DISCORD CHANNEL: ${discordChannelMatches}`);
-			user = discordChannelMatches[1];
+		const discordUserMatches = String(args[3]).match(/\<\@(.*?)\>/);
+		let user;
+		if (discordUserMatches) {
+			// logger.debug(`DISCORD CHANNEL: ${discordUserMatches}`);
+			user = discordUserMatches[1];
 		}
 
-		if (role !== null && user !== null) {
+		if (role !== null && user !== null && role !== undefined && user !== undefined) {
 			const etName = args[1];
 			const etParty = DB.findET(etName);
 
 			if (etParty !== null) {
-				logger.info(`User: ${user}`)
+				logger.info(`User: ${user}`);
 				var previousUser;
 				var previousRoleName;
 
@@ -614,35 +614,35 @@ module.exports = {
 
 				if (duplicate) {
 					message.channel.send(`Sorry <@${user}> already joined.`);
-					return
+					return;
 				}
 
-				if (etParty.role1Name !== null && role === `1`) {
+				if (etParty.role1Name !== null && role === '1') {
 					previousUser = etParty.role1User;
-					previousRoleName = etParty.role1Name;	
+					previousRoleName = etParty.role1Name;
 					etParty.role1User = user;
 
 				}
 
-				if (etParty.role2Name !== null && role === `2`) {
+				if (etParty.role2Name !== null && role === '2') {
 					previousUser = etParty.role2User;
 					previousRoleName = etParty.role2Name;
 					etParty.role2User = user;
 				}
 
-				if (etParty.role3Name !== null && role === `3`) {
+				if (etParty.role3Name !== null && role === '3') {
 					previousUser = etParty.role3User;
 					previousRoleName = etParty.role3Name;
 					etParty.role3User = user;
 				}
 
-				if (etParty.role4Name !== null && role === `4`) {
+				if (etParty.role4Name !== null && role === '4') {
 					previousUser = etParty.role4User;
 					previousRoleName = etParty.role4Name;
 					etParty.role4User = user;
 				}
 
-				if (etParty.role5Name !== null && role === `5`) {
+				if (etParty.role5Name !== null && role === '5') {
 					previousUser = etParty.role5User;
 					previousRoleName = etParty.role5Name;
 					etParty.role5User = user;
@@ -672,6 +672,8 @@ module.exports = {
 			} else {
 				message.channel.send(`No ET Party found for ID: ${etName}`);
 			}
+		} else {
+			message.channel.send('Please check that Slot# and User is stated in your command. E.g. ' + prefix + 'ET 12345 **2 @SilvStar**');
 		}
 	},
 	leaveETParty: function(message, args) {
