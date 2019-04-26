@@ -15,17 +15,17 @@ const COMMAND_MY = 'my';
 const COMMAND_DELETE = 'delete';
 const COMMAND_LEAVE = 'leave';
 
-var CMD_PREFIX = varFile.CMD_PREFIX;
-var AUTO_DELETE_COMMANDS = varFile.AUTO_DELETE_COMMANDS;
+const CMD_PREFIX = varFile.CMD_PREFIX;
+const AUTO_DELETE_COMMANDS = varFile.AUTO_DELETE_COMMANDS;
 
-var reaction_numbers = ["\u0030\u20E3","\u0031\u20E3","\u0032\u20E3","\u0033\u20E3","\u0034\u20E3","\u0035\u20E3", "\u0036\u20E3","\u0037\u20E3","\u0038\u20E3","\u0039\u20E3"]
+const reaction_numbers = ["\u0030\u20E3", "\u0031\u20E3", "\u0032\u20E3", "\u0033\u20E3", "\u0034\u20E3", "\u0035\u20E3", "\u0036\u20E3", "\u0037\u20E3", "\u0038\u20E3", "\u0039\u20E3"];
 
 // Configure logger settings
-logger.remove(logger.transports.Console)
+logger.remove(logger.transports.Console);
 logger.add(new logger.transports.Console, {
-    colorize: true
-})
-logger.level = 'debug'
+	colorize: true
+});
+logger.level = 'debug';
 
 // Initialize Discord Bot
 // const bot = new Discord.Client();
@@ -35,51 +35,51 @@ bot.commands = new Discord.Collection();
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 
 for (const file of commandFiles) {
-    const command = require(`./commands/${file}`);
-    bot.commands.set(command.name, command);
+	const command = require(`./commands/${file}`);
+	bot.commands.set(command.name, command);
 }
 
-bot.on('ready', function (evt) {
-    logger.info('Connected')
-    logger.info('Logged in as: ')
-    logger.info(bot.user.username + ' - (' + bot.user.id + ')')
-})
+bot.on('ready', function(evt) {
+	logger.info('Connected');
+	logger.info('Logged in as: ');
+	logger.info(bot.user.username + ' - (' + bot.user.id + ')');
+});
 
 bot.on('message', (message) => {
-    if (!message.content.startsWith(CMD_PREFIX) || message.author.bot) return;
+	if (!message.content.startsWith(CMD_PREFIX) || message.author.bot) return;
 
-    const args = message.content.slice(CMD_PREFIX.length).split(/ +/);
-    const command = args.shift().toLowerCase();
-    const cmd = command;
-    var channelID = message.channel.id
+	const args = message.content.slice(CMD_PREFIX.length).split(/ +/);
+	const command = args.shift().toLowerCase();
+	const cmd = command;
+	var channelID = message.channel.id;
 
-    if (channelID !== varFile.BOT_CMD_SPAM_CHANNEL_ID) {
-        message.reply(`Please use command in <#${varFile.BOT_CMD_SPAM_CHANNEL_ID}>`).then(msg => {
-            setTimeout(function() {
-                message.delete();
-                msg.delete();
-            }, varFile.AUTO_DELETE_TIME);
-        }).catch(error => {
-            logger.error(`Unable to reply to user: [WRONG CHANNEL] ${error.message}`)
-        })
-    } else {
-        if (!bot.commands.has(command)) {
-            message.reply('This don\'t do anything. Please check your spelling. Use **' + CMD_PREFIX + 'help** for list of commands available.');
-            return;
-        };
-    
-        try {
-            bot.commands.get(command).execute(message, args);
-            if (AUTO_DELETE_COMMANDS) {
-                message.delete();
-            }
-        } catch (error) {
-            logger.error(error);
-            logger.error(error.message);
-            message.reply('There is an error with your command. Please check your spelling. Use **' + CMD_PREFIX + 'help** for list of commands available.');
-        }
-    }
+	if (channelID !== varFile.BOT_CMD_SPAM_CHANNEL_ID && message.channel.type !== 'dm') {
+		message.reply(`Please use command in <#${varFile.BOT_CMD_SPAM_CHANNEL_ID}>`).then(msg => {
+			setTimeout(function() {
+				message.delete();
+				msg.delete();
+			}, varFile.AUTO_DELETE_TIME);
+		}).catch(error => {
+			logger.error(`Unable to reply to user: [WRONG CHANNEL] ${error.message}`);
+		});
+	} else {
+		if (!bot.commands.has(command)) {
+			message.reply('This don\'t do anything. Please check your spelling. Use **' + CMD_PREFIX + 'help** for list of commands available.');
+			return;
+		}
 
-})
+		try {
+			bot.commands.get(command).execute(message, args);
+			if (AUTO_DELETE_COMMANDS) {
+				message.delete();
+			}
+		} catch (error) {
+			logger.error(error);
+			logger.error(error.message);
+			message.reply('There is an error with your command. Please check your spelling. Use **' + CMD_PREFIX + 'help** for list of commands available.');
+		}
+	}
 
-bot.login(auth.token)
+});
+
+bot.login(auth.token);
