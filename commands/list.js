@@ -22,7 +22,7 @@ module.exports = {
 			// message.channel.send('Please specify which list you are requesting, ET, Oracle, MVP or Any. E.g. ' + CMD_PREFIX + 'LIST ET se42GD')
 			message.channel.send('Please use ' + varFile.CMD_PREFIX + 'list ET.');
 		} else {
-			func.showHelp(message);
+			message.channel.send('Opps, there is a problem processing your request. Please check your format.');
 		}
 	},
 };

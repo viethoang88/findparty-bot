@@ -3,7 +3,6 @@ const func = require('../functions/functions.js');
 // const logger = require('winston');
 
 const isDefined = func.isDefined;
-const showHelp = func.showHelp;
 const joinET = func.joinET;
 const ET_TYPE = varFile.ET_TYPE;
 
@@ -26,7 +25,7 @@ module.exports = {
 		} else if (isDefined(instance) === false) {
 			message.channel.send('Opps, there is a problem processing your request. Please check your format.');
 		} else {
-			showHelp(message);
+			message.channel.send('Opps, there is a problem processing your request. Please check your format.');
 		}
 	},
 };

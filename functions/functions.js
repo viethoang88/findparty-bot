@@ -12,8 +12,8 @@ const AUTO_DELETE_TIME = varFile.AUTO_DELETE_TIME;
 module.exports = {
 	showHelp: function(message) {
 		const helpEmbed = new Discord.RichEmbed()
-			.setTitle(`User manual for creating and find party`)
-			.setDescription(`Please follow the instructions and put correct brackets as below. Please use commands carefully, bot is fragile :)`)
+			.setTitle(`User manual for creating and finding party`)
+			.setDescription(`Please follow the instructions and use the correct brackets as below. Please use commands carefully, bot is fragile :)`)
 			.addField(`List out all ET parties or specific party (coming soon)`,
 				`Command: ${prefix}list ET or ${prefix}list ET ID\n` +
 				`Example: ${prefix}list ET se42GD\n`)
@@ -32,16 +32,16 @@ module.exports = {
 			.addField(`Delete ET party`,
 				`Command: ${prefix}delete ET ID\n` +
 				`Example: ${prefix}delete ET se42GD 1fnj12\n` +
-				`Notes: Only creator of party or person with permissions can delete party.`);
-		message.channel.send(helpEmbed)
-			.then(msg => {
-				if (AUTO_DELETE_MODE) {
-					setTimeout(function() {
-						message.delete();
-						msg.delete();
-					}, AUTO_DELETE_TIME);
-				}
-			});
+				`Notes: Only creator of party or person with permissions can delete party.`)
+			.setFooter('By our very own FF Entourage management', 'https://cdn.discordapp.com/icons/566782560294928385/3736129398539082770518dc5278911d.png');
+		// message.author.send(helpEmbed)
+		// 	.then(() => {
+		// 		if (message.channel.type === 'dm') return;
+		// 	})
+		// 	.catch(error => {
+		// 		console.error(`Could not send help DM to ${message.author.tag}.\n`, error);
+		// 	});
+		return helpEmbed;
 	},
 	isDefined: function(variable) {
 		if (typeof variable === `undefined` || variable === null) {
@@ -52,7 +52,7 @@ module.exports = {
 	},
 	displayLFPETResults: function(message, results) {
 		if (results.length == 0) {
-			message.channel.send(`There are no newly created ET parties`)
+			message.channel.send(`No ET party has been created.`)
 			.then(msg => {
 				if (AUTO_DELETE_MODE) {
 					setTimeout(function() {
@@ -62,7 +62,7 @@ module.exports = {
 				}
 			});
 		} else {
-			message.channel.send(`There are ${results.length} newly created ET parties`)
+			message.channel.send(`There are ${results.length} ET parties.`)
 			.then(msg => {
 				if (AUTO_DELETE_MODE) {
 					setTimeout(function() {

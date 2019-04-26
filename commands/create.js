@@ -4,7 +4,6 @@ const func = require('../functions/functions.js');
 
 const isDefined = func.isDefined;
 const createETParty = func.createETParty;
-const showHelp = func.showHelp;
 const ET_TYPE = varFile.ET_TYPE;
 
 module.exports = {
@@ -38,7 +37,7 @@ module.exports = {
 			// message.channel.send('Please specify what party you are creating, ET, Oracle, MVP or Any.')
 			message.channel.send('Please specify ET in your commands.');
 		} else {
-			showHelp(message);
+			message.channel.send('Opps, there is a problem processing your request. Please check your format.');
 		}
 	},
 };
