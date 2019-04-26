@@ -377,11 +377,11 @@ module.exports = {
 	},
 	removeETUser: function(message, args) {
 		const role = args[2];
-		const user = args[3];
+		// const user = args[3];
 
 		// logger.debug(`role: ` + role);
 		// logger.debug(`user: ` + user);
-		if (role !== null && user !== null) {
+		if (role !== null && role !== undefined) {
 			const etName = args[1];
 			const etParty = DB.findET(etName);
 
@@ -415,6 +415,8 @@ module.exports = {
 					
 				});
 			}
+		} else {
+			message.channel.send('Please check that PartyID & Slot# are stated in your command. E.g. ' + prefix + 'remove ET **12345 2**');
 		}
 	},
 	joinET: function(message, args) {
@@ -673,7 +675,7 @@ module.exports = {
 				message.channel.send(`No ET Party found for ID: ${etName}`);
 			}
 		} else {
-			message.channel.send('Please check that Slot# and User is stated in your command. E.g. ' + prefix + 'ET 12345 **2 @SilvStar**');
+			message.channel.send('Please check that PartyID, Slot# and User are stated in your command. E.g. ' + prefix + 'replace ET **12345 2 @SilvStar**');
 		}
 	},
 	leaveETParty: function(message, args) {
