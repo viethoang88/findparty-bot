@@ -4,7 +4,7 @@ const logger = require(`winston`);
 
 const bot = varFile.bot;
 const DB = varFile.DB;
-const prefix = varFile.prefix;
+const prefix = varFile.CMD_PREFIX;
 const ET_TYPE = varFile.ET_TYPE;
 const AUTO_DELETE_MODE = varFile.AUTO_DELETE_MODE;
 const AUTO_DELETE_TIME = varFile.AUTO_DELETE_TIME;
@@ -103,12 +103,36 @@ module.exports = {
 				.setTitle(`ET ID: ${model.name} | [${model.date}] (${model.romChannel})`)
 				.setColor(model.color)
 				.setDescription(`${model.discordChannel}`)
-				.addField(`1. ${model.role1Name}`, model.role1User === null ? `Empty` : `<@` + model.role1User + `>`)
-				.addField(`2. ${model.role2Name}`, model.role2User === null ? `Empty` : `<@` + model.role2User + `>`)
-				.addField(`3. ${model.role3Name}`, model.role3User === null ? `Empty` : `<@` + model.role3User + `>`)
-				.addField(`4. ${model.role4Name}`, model.role4User === null ? `Empty` : `<@` + model.role4User + `>`)
-				.addField(`5. ${model.role5Name}`, model.role5User === null ? `Empty` : `<@` + model.role5User + `>`)
-				.setAuthor(`${bot.users.get(model.createdBy).username}`, `${bot.users.get(model.createdBy).avatarURL}`);
+				.setAuthor(`${bot.users.get(model.createdBy).username}`, `${bot.users.get(model.createdBy).avatarURL}`)
+				if (model.role1Alt) {
+					embed.addField(`1. ${model.role1Name}`, model.role1User === null ? `Empty` : `<@${model.role1User}> - ALT`)
+				} else {
+					embed.addField(`1. ${model.role1Name}`, model.role1User === null ? `Empty` : `<@${model.role1User}>`)
+				}
+
+				if (model.role2Alt) {
+					embed.addField(`2. ${model.role2Name}`, model.role2User === null ? `Empty` : `<@${model.role2User}> - ALT`)
+				} else {
+					embed.addField(`2. ${model.role2Name}`, model.role2User === null ? `Empty` : `<@${model.role2User}>`)
+				}
+
+				if (model.role3Alt) {
+					embed.addField(`3. ${model.role3Name}`, model.role3User === null ? `Empty` : `<@${model.role3User}> - ALT`)
+				} else {
+					embed.addField(`3. ${model.role3Name}`, model.role3User === null ? `Empty` : `<@${model.role3User}>`)
+				}
+
+				if (model.role4Alt) {
+					embed.addField(`4. ${model.role4Name}`, model.role4User === null ? `Empty` : `<@${model.role4User}> - ALT`)
+				} else {
+					embed.addField(`4. ${model.role4Name}`, model.role4User === null ? `Empty` : `<@${model.role4User}>`)
+				}
+
+				if (model.role5Alt) {
+					embed.addField(`5. ${model.role5Name}`, model.role5User === null ? `Empty` : `<@${model.role5User}> - ALT`)
+				} else {
+					embed.addField(`5. ${model.role5Name}`, model.role5User === null ? `Empty` : `<@${model.role5User}>`)
+				}
 			return embed;
 		} else {
 			return null;
@@ -188,6 +212,17 @@ module.exports = {
 
 		var tags = ``
 
+		if (etParty.role1User !== null && etParty.role2User !== null && etParty.role3User !== null && etParty.role4User !== null && etParty.role5User !== null) {
+			// PARTY IS FULL 
+			message.reply(`Party is already full.`)
+			return 
+		} else {
+			if (etParty.status != 'OPEN') {
+				etParty.status = 'OPEN'
+				DB.updateET(etParty)
+			}
+		}
+
 		if (etParty != null) {
 			if ((etParty.role1Name === "ANY" && etParty.role1User === null) || (etParty.role2Name === "ANY" && etParty.role2User === null) || (etParty.role3Name === "ANY" && etParty.role3User === null)
 			|| (etParty.role4Name === "ANY" && etParty.role4User === null) || (etParty.role5Name === "ANY" && etParty.role5User === null)) {
@@ -233,17 +268,19 @@ module.exports = {
 					}
 				}
 			}
-		
-			message.channel.send(tags)
+			const embed = module.exports.getEmbed(etParty, ET_TYPE)
+			embed.addField('Our party is looking for', tags)
+			message.channel.send(embed)
 		}
 	},
 	addETUser: function(message, args) {
 		const role = args[2];
 		const user = args[3];
+		const alt = args[4];
 
 		// logger.debug(`role: ` + role);
 		// logger.debug(`user: ` + user);
-		if (role !== null && user !== null) {
+		if (role != null && role != undefined && user != null && user != undefined && user.indexOf('undefined')) {
 			const etName = args[1];
 			const etParty = DB.findET(etName);
 
@@ -261,6 +298,10 @@ module.exports = {
 					duplicate = true;
 				}
 
+				if (alt !== null || alt !== undefined) {
+					duplicate = false
+				}
+
 				if (duplicate) {
 					message.channel.send(`Sorry <@${userId}> already joined.`);
 					return
@@ -270,33 +311,38 @@ module.exports = {
 					switch(role) {
 					case `1`:
 						etParty.role1User = userId;
+						if (alt != null || alt != undefined) {
+							etParty.role1Alt = true
+						}
 						break;
 					case `2`:
 						etParty.role2User = userId;
+						if (alt != null || alt != undefined) {
+							etParty.role2Alt = true
+						}
 						break;
 					case `3`:
 						etParty.role3User = userId;
+						if (alt != null || alt != undefined) {
+							etParty.role3Alt = true
+						}
 						break;
 					case `4`:
 						etParty.role4User = userId;
+						if (alt != null || alt != undefined) {
+							etParty.role4Alt = true
+						}
 						break;
 					case `5`:
 						etParty.role5User = userId;
+						if (alt != null || alt != undefined) {
+							etParty.role5Alt = true
+						}
 						break;
 					}
 
 					const newET = DB.updateET(etParty);
-					const embed = new Discord.RichEmbed()
-						.setTitle(`ET ID:${newET.name} [${newET.date}] (${newET.romChannel})`)
-						.setColor(newET.color)
-						.setDescription(`${newET.discordChannel}`)
-						.addField(`1. ${newET.role1Name}`, newET.role1User === null ? `Empty` : `<@` + newET.role1User + `>`)
-						.addField(`2. ${newET.role2Name}`, newET.role2User === null ? `Empty` : `<@` + newET.role2User + `>`)
-						.addField(`3. ${newET.role3Name}`, newET.role3User === null ? `Empty` : `<@` + newET.role3User + `>`)
-						.addField(`4. ${newET.role4Name}`, newET.role4User === null ? `Empty` : `<@` + newET.role4User + `>`)
-						.addField(`5. ${newET.role5Name}`, newET.role5User === null ? `Empty` : `<@` + newET.role5User + `>`);
-					// message.channel.send(embed);
-
+					const embed = module.exports.getEmbed(newET, ET_TYPE)
 					message.channel.send(embed).then(msg => {
 						if (newET.role1User !== null && newET.role2User !== null && newET.role3User !== null && newET.role4User !== null && newET.role5User !== null) {
 							// logger.info(`Saved discord ID: ` + newET.discordChannel);
@@ -335,37 +381,31 @@ module.exports = {
 				switch(role) {
 				case `1`:
 					etParty.role1User = null;
+					etParty.role1Alt = false;
 					break;
 				case `2`:
 					etParty.role2User = null;
+					etParty.role2Alt = false;
 					break;
 				case `3`:
 					etParty.role3User = null;
+					etParty.role3Alt = false;
 					break;
 				case `4`:
 					etParty.role4User = null;
+					etParty.role4Alt = false;
 					break;
 				case `5`:
 					etParty.role5User = null;
+					etParty.role5Alt = false;
 					break;
 				}
 
 				const newET = DB.updateET(etParty);
-
-				const embed = new Discord.RichEmbed()
-					.setTitle(`ET ID:${newET.name} [${newET.date}] (${newET.romChannel})`)
-					.setColor(newET.color)
-					.setDescription(`${newET.discordChannel}`)
-					.addField(`1. ${newET.role1Name}`, newET.role1User === null ? `Empty` : `<@` + newET.role1User + `>`)
-					.addField(`2. ${newET.role2Name}`, newET.role2User === null ? `Empty` : `<@` + newET.role2User + `>`)
-					.addField(`3. ${newET.role3Name}`, newET.role3User === null ? `Empty` : `<@` + newET.role3User + `>`)
-					.addField(`4. ${newET.role4Name}`, newET.role4User === null ? `Empty` : `<@` + newET.role4User + `>`)
-					.addField(`5. ${newET.role5Name}`, newET.role5User === null ? `Empty` : `<@` + newET.role5User + `>`);
-				// message.channel.send(embed);
-
-					message.channel.send(embed).then(msg => {
-						
-					});
+				const embed = module.exports.getEmbed(newET, ET_TYPE)
+				message.channel.send(embed).then(msg => {
+					
+				});
 			}
 		}
 	},
@@ -497,15 +537,7 @@ module.exports = {
 						}, 15000);
 					});
 
-				const embed = new Discord.RichEmbed()
-					.setTitle(`ET ID:${newET.name} [${newET.date}] (${newET.romChannel})`)
-					.setColor(newET.color)
-					.setDescription(`${newET.discordChannel}`)
-					.addField(`1. ${newET.role1Name}`, newET.role1User === null ? `Empty` : `<@` + newET.role1User + `>`)
-					.addField(`2. ${newET.role2Name}`, newET.role2User === null ? `Empty` : `<@` + newET.role2User + `>`)
-					.addField(`3. ${newET.role3Name}`, newET.role3User === null ? `Empty` : `<@` + newET.role3User + `>`)
-					.addField(`4. ${newET.role4Name}`, newET.role4User === null ? `Empty` : `<@` + newET.role4User + `>`)
-					.addField(`5. ${newET.role5Name}`, newET.role5User === null ? `Empty` : `<@` + newET.role5User + `>`);
+				const embed = module.exports.getEmbed(newET, ET_TYPE)
 
 				message.channel.send(embed).then(msg => {
 					// if (newET.role1User !== null) { testing purpose
@@ -535,16 +567,7 @@ module.exports = {
 				newET.queue.forEach(id => {
 					queueText += `<@${id}> `;
 				});
-				const embed = new Discord.RichEmbed()
-					.setTitle(`ET ID:${newET.name} [${newET.date}] (${newET.romChannel})`)
-					.setColor(newET.color)
-					.setDescription(`${newET.discordChannel}`)
-					.addField(`1. ${newET.role1Name}`, newET.role1User === null ? `Empty` : newET.role1User)
-					.addField(`2. ${newET.role2Name}`, newET.role2User === null ? `Empty` : newET.role2User)
-					.addField(`3. ${newET.role3Name}`, newET.role3User === null ? `Empty` : newET.role3User)
-					.addField(`4. ${newET.role4Name}`, newET.role4User === null ? `Empty` : newET.role4User)
-					.addField(`5. ${newET.role5Name}`, newET.role5User === null ? `Empty` : newET.role5User)
-					.addField(`Queue`, `${queueText}`);
+				const embed = module.exports.getEmbed(newET, ET_TYPE)
 
 				message.channel.send(embed);
 				message.channel.send(`Sorry ${message.author.username} all slots are taken. You have been added as to queue.`);
@@ -618,15 +641,7 @@ module.exports = {
 				}
 
 				let newET = DB.updateET(etParty);
-				const embed = new Discord.RichEmbed()
-					.setTitle(`ET ID:${newET.name} [${newET.date}] (${newET.romChannel})`)
-					.setColor(newET.color)
-					.setDescription(`${newET.discordChannel}`)
-					.addField(`1. ${newET.role1Name}`, newET.role1User === null ? `Empty` : `<@` + newET.role1User + `>`)
-					.addField(`2. ${newET.role2Name}`, newET.role2User === null ? `Empty` : `<@` + newET.role2User + `>`)
-					.addField(`3. ${newET.role3Name}`, newET.role3User === null ? `Empty` : `<@` + newET.role3User + `>`)
-					.addField(`4. ${newET.role4Name}`, newET.role4User === null ? `Empty` : `<@` + newET.role4User + `>`)
-					.addField(`5. ${newET.role5Name}`, newET.role5User === null ? `Empty` : `<@` + newET.role5User + `>`);
+				const embed = module.exports.getEmbed(newET, ET_TYPE)
 
 				message.channel.send(embed).then(msg => {
 					message.channel.send(`${previousRoleName}: <@${previousUser}> was replaced by <@${user}>`)
@@ -721,16 +736,7 @@ module.exports = {
 			});
 
 		results.forEach(et => {
-			const embed = new Discord.RichEmbed()
-				.setTitle(`ET ${et.name} [${et.date}] (${et.romChannel})`)
-				.setColor(et.color)
-				.setDescription(`${et.discordChannel}`)
-				.addField(`1. ${et.role1Name}`, et.role1User === null ? `Empty` : `<@` + et.role1User + `>`)
-				.addField(`2. ${et.role2Name}`, et.role2User === null ? `Empty` : `<@` + et.role2User + `>`)
-				.addField(`3. ${et.role3Name}`, et.role3User === null ? `Empty` : `<@` + et.role3User + `>`)
-				.addField(`4. ${et.role4Name}`, et.role4User === null ? `Empty` : `<@` + et.role4User + `>`)
-				.addField(`5. ${et.role5Name}`, et.role5User === null ? `Empty` : `<@` + et.role5User + `>`)
-				.setAuthor(`${bot.users.get(et.createdBy).username}`, `${bot.users.get(et.createdBy).avatarURL}`);
+			const embed = module.exports.getEmbed(et, ET_TYPE)
 			message.channel.send(embed);
 		});
 	},
@@ -752,11 +758,35 @@ module.exports = {
 						.setTitle(`ET ID:${newET.name} [${newET.date}] (${newET.romChannel})`)
 						.setColor(newET.color)
 						.setDescription(`${newET.discordChannel}`)
-						.addField(`1. ${newET.role1Name}`, newET.role1User === null ? `Empty` : `<@` + newET.role1User + `>`)
-						.addField(`2. ${newET.role2Name}`, newET.role2User === null ? `Empty` : `<@` + newET.role2User + `>`)
-						.addField(`3. ${newET.role3Name}`, newET.role3User === null ? `Empty` : `<@` + newET.role3User + `>`)
-						.addField(`4. ${newET.role4Name}`, newET.role4User === null ? `Empty` : `<@` + newET.role4User + `>`)
-						.addField(`5. ${newET.role5Name}`, newET.role5User === null ? `Empty` : `<@` + newET.role5User + `>`);
+						if (newET.role1Alt) {
+							embed.addField(`1. ${newET.role1Name}`, newET.role1User === null ? `Empty` : `<@${newET.role1User}> - ALT`)
+						} else {
+							embed.addField(`1. ${newET.role1Name}`, newET.role1User === null ? `Empty` : `<@${newET.role1User}>`)
+						}
+	
+						if (newET.role2Alt) {
+							embed.addField(`1. ${newET.role2Name}`, newET.role2User === null ? `Empty` : `<@${newET.role2User}> - ALT`)
+						} else {
+							embed.addField(`1. ${newET.role2Name}`, newET.role2User === null ? `Empty` : `<@${newET.role2User}>`)
+						}
+	
+						if (newET.role3Alt) {
+							embed.addField(`1. ${newET.role3Name}`, newET.role3User === null ? `Empty` : `<@${newET.role3User}> - ALT`)
+						} else {
+							embed.addField(`1. ${newET.role3Name}`, newET.role3User === null ? `Empty` : `<@${newET.role3User}>`)
+						}
+	
+						if (newET.role4Alt) {
+							embed.addField(`1. ${newET.role4Name}`, newET.role4User === null ? `Empty` : `<@${newET.role4User}> - ALT`)
+						} else {
+							embed.addField(`1. ${newET.role4Name}`, newET.role4User === null ? `Empty` : `<@${newET.role4User}>`)
+						}
+	
+						if (newET.role5Alt) {
+							embed.addField(`1. ${newET.role5Name}`, newET.role5User === null ? `Empty` : `<@${newET.role5User}> - ALT`)
+						} else {
+							embed.addField(`1. ${newET.role5Name}`, newET.role5User === null ? `Empty` : `<@${newET.role5User}>`)
+						}
 					const discordChannelMatch = String(newET.discordChannel).match(/\<\#(.*?)\>/);
 					if (discordChannelMatch) {
 						const chanId = String(discordChannelMatch[1]);

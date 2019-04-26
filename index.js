@@ -51,25 +51,35 @@ bot.on('message', (message) => {
     const args = message.content.slice(CMD_PREFIX.length).split(/ +/);
     const command = args.shift().toLowerCase();
     const cmd = command;
+    var channelID = message.channel.id
 
-    if (!bot.commands.has(command)) {
-        message.reply('This don\'t do anything. Please check your spelling. Use **' + CMD_PREFIX + 'help** for list of commands available.');
-        return;
-    };
-
-    try {
-        bot.commands.get(command).execute(message, args);
-        if (AUTO_DELETE_COMMANDS) {
-            message.delete();
+    if (channelID !== varFile.BOT_CMD_SPAM_CHANNEL_ID) {
+        message.reply(`Please use command in <#${varFile.BOT_CMD_SPAM_CHANNEL_ID}>`).then(msg => {
+            setTimeout(function() {
+                message.delete();
+                msg.delete();
+            }, varFile.AUTO_DELETE_TIME);
+        }).catch(error => {
+            logger.error(`Unable to reply to user: [WRONG CHANNEL] ${error.message}`)
+        })
+    } else {
+        if (!bot.commands.has(command)) {
+            message.reply('This don\'t do anything. Please check your spelling. Use **' + CMD_PREFIX + 'help** for list of commands available.');
+            return;
+        };
+    
+        try {
+            bot.commands.get(command).execute(message, args);
+            if (AUTO_DELETE_COMMANDS) {
+                message.delete();
+            }
+        } catch (error) {
+            logger.error(error);
+            logger.error(error.message);
+            message.reply('There is an error with your command. Please check your spelling. Use **' + CMD_PREFIX + 'help** for list of commands available.');
         }
-    } catch (error) {
-        logger.error(error);
-        logger.error(error.message);
-        message.reply('There is an error with your command. Please check your spelling. Use **' + CMD_PREFIX + 'help** for list of commands available.');
     }
 
-    var channelID = message.channel.id
-    
 })
 
 bot.login(auth.token)
