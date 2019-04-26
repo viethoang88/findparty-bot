@@ -17,10 +17,14 @@ module.exports = {
 				// logger.debug(`Found ETs: ${results}`);
 				func.displayLFPETResults(message, results);
 				break;
+			default:
+				// message.channel.send(instance + ' does not exists. Please use ET, Oracle, MVP, BQRIFT, ANY')
+				message.channel.send('Please use ' + varFile.CMD_PREFIX + 'list **ET**.');
+				break;
 			}
 		} else if (func.isDefined(instance) === false) {
 			// message.channel.send('Please specify which list you are requesting, ET, Oracle, MVP or Any. E.g. ' + CMD_PREFIX + 'LIST ET se42GD')
-			message.channel.send('Please use ' + varFile.CMD_PREFIX + 'list ET.');
+			message.channel.send('Please use ' + varFile.CMD_PREFIX + 'list **ET**.');
 		} else {
 			message.channel.send('Opps, there is a problem processing your request. Please check your format.');
 		}
