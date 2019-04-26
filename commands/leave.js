@@ -12,7 +12,7 @@ module.exports = {
 	description: 'This command is for leaving an ET party that you\'ve joined.',
 	format: 'ET PartyID (reason)',
 	example: 'ET se42GD (I am not feeling well)',
-	notes: 'Make sure reason is in ( ) brackets. Only creator of party or person with permissions can delete party.',
+	notes: 'Make sure reason is in ( ) brackets.',
 	group: 'party-finder',
 	execute(message, args) {
 		const instance = args[0];
