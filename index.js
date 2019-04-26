@@ -35,8 +35,8 @@ bot.commands = new Discord.Collection();
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 
 for (const file of commandFiles) {
-	const command = require(`./commands/${file}`);
-	bot.commands.set(command.name, command);
+	const commandFile = require(`./commands/${file}`);
+	bot.commands.set(commandFile.name, commandFile);
 }
 
 bot.on('ready', function(evt) {

@@ -105,31 +105,31 @@ module.exports = {
 				.setDescription(`${model.discordChannel}`)
 				.setAuthor(`${bot.users.get(model.createdBy).username}`, `${bot.users.get(model.createdBy).avatarURL}`);
 				if (model.role1Alt) {
-					embed.addField(`1. ${model.role1Name}`, model.role1User === null ? `Empty` : `<@${model.role1User}> - ALT`);
+					embed.addField(`1. ${model.role1Name}`, model.role1User === null ? `Empty` : `<@${model.role1User}> - ALT/Slave`);
 				} else {
 					embed.addField(`1. ${model.role1Name}`, model.role1User === null ? `Empty` : `<@${model.role1User}>`)
 				}
 
 				if (model.role2Alt) {
-					embed.addField(`2. ${model.role2Name}`, model.role2User === null ? `Empty` : `<@${model.role2User}> - ALT`);
+					embed.addField(`2. ${model.role2Name}`, model.role2User === null ? `Empty` : `<@${model.role2User}> - ALT/Slave`);
 				} else {
 					embed.addField(`2. ${model.role2Name}`, model.role2User === null ? `Empty` : `<@${model.role2User}>`)
 				}
 
 				if (model.role3Alt) {
-					embed.addField(`3. ${model.role3Name}`, model.role3User === null ? `Empty` : `<@${model.role3User}> - ALT`);
+					embed.addField(`3. ${model.role3Name}`, model.role3User === null ? `Empty` : `<@${model.role3User}> - ALT/Slave`);
 				} else {
 					embed.addField(`3. ${model.role3Name}`, model.role3User === null ? `Empty` : `<@${model.role3User}>`)
 				}
 
 				if (model.role4Alt) {
-					embed.addField(`4. ${model.role4Name}`, model.role4User === null ? `Empty` : `<@${model.role4User}> - ALT`);
+					embed.addField(`4. ${model.role4Name}`, model.role4User === null ? `Empty` : `<@${model.role4User}> - ALT/Slave`);
 				} else {
 					embed.addField(`4. ${model.role4Name}`, model.role4User === null ? `Empty` : `<@${model.role4User}>`)
 				}
 
 				if (model.role5Alt) {
-					embed.addField(`5. ${model.role5Name}`, model.role5User === null ? `Empty` : `<@${model.role5User}> - ALT`);
+					embed.addField(`5. ${model.role5Name}`, model.role5User === null ? `Empty` : `<@${model.role5User}> - ALT/Slave`);
 				} else {
 					embed.addField(`5. ${model.role5Name}`, model.role5User === null ? `Empty` : `<@${model.role5User}>`)
 				}
@@ -372,7 +372,7 @@ module.exports = {
 				message.channel.send(`ET Party not found.`);
 			}
 		} else {
-			message.channel.send(`Command not used correctly. Please check that role number is 1-5 and also tag the user accordingly.`);
+			message.channel.send(`Command not used correctly. Please check that PartyID is included, role number is 1-5 and also tag the user accordingly.`);
 		}
 	},
 	removeETUser: function(message, args) {
@@ -773,31 +773,31 @@ module.exports = {
 						.setColor(newET.color)
 						.setDescription(`${newET.discordChannel}`)
 						if (newET.role1Alt) {
-							embed.addField(`1. ${newET.role1Name}`, newET.role1User === null ? `Empty` : `<@${newET.role1User}> - ALT`)
+							embed.addField(`1. ${newET.role1Name}`, newET.role1User === null ? `Empty` : `<@${newET.role1User}> - ALT/Slave`)
 						} else {
 							embed.addField(`1. ${newET.role1Name}`, newET.role1User === null ? `Empty` : `<@${newET.role1User}>`)
 						}
 	
 						if (newET.role2Alt) {
-							embed.addField(`1. ${newET.role2Name}`, newET.role2User === null ? `Empty` : `<@${newET.role2User}> - ALT`)
+							embed.addField(`1. ${newET.role2Name}`, newET.role2User === null ? `Empty` : `<@${newET.role2User}> - ALT/Slave`)
 						} else {
 							embed.addField(`1. ${newET.role2Name}`, newET.role2User === null ? `Empty` : `<@${newET.role2User}>`)
 						}
 	
 						if (newET.role3Alt) {
-							embed.addField(`1. ${newET.role3Name}`, newET.role3User === null ? `Empty` : `<@${newET.role3User}> - ALT`)
+							embed.addField(`1. ${newET.role3Name}`, newET.role3User === null ? `Empty` : `<@${newET.role3User}> - ALT/Slave`)
 						} else {
 							embed.addField(`1. ${newET.role3Name}`, newET.role3User === null ? `Empty` : `<@${newET.role3User}>`)
 						}
 	
 						if (newET.role4Alt) {
-							embed.addField(`1. ${newET.role4Name}`, newET.role4User === null ? `Empty` : `<@${newET.role4User}> - ALT`)
+							embed.addField(`1. ${newET.role4Name}`, newET.role4User === null ? `Empty` : `<@${newET.role4User}> - ALT/Slave`)
 						} else {
 							embed.addField(`1. ${newET.role4Name}`, newET.role4User === null ? `Empty` : `<@${newET.role4User}>`)
 						}
 	
 						if (newET.role5Alt) {
-							embed.addField(`1. ${newET.role5Name}`, newET.role5User === null ? `Empty` : `<@${newET.role5User}> - ALT`)
+							embed.addField(`1. ${newET.role5Name}`, newET.role5User === null ? `Empty` : `<@${newET.role5User}> - ALT/Slave`)
 						} else {
 							embed.addField(`1. ${newET.role5Name}`, newET.role5User === null ? `Empty` : `<@${newET.role5User}>`)
 						}
