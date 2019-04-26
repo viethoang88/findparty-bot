@@ -20,6 +20,18 @@ function databaseInitialize() {
   }
 }
 
+Array.prototype.unique = function() {
+  var a = this.concat();
+  for(var i=0; i<a.length; ++i) {
+      for(var j=i+1; j<a.length; ++j) {
+          if(a[i] === a[j])
+              a.splice(j--, 1);
+      }
+  }
+
+  return a;
+};
+
 class DBModule {
   constructor() {
     databaseInitialize()
@@ -46,7 +58,7 @@ class DBModule {
     var joinedInRole4ByMe = etDB.find({role4User: userId})
     var joinedInRole5ByMe = etDB.find({role5User: userId})
 
-    return joinedInRole1ByMe.concat(joinedInRole2ByMe).concat(joinedInRole3ByMe).concat(joinedInRole4ByMe).concat(joinedInRole5ByMe)
+    return joinedInRole1ByMe.concat(joinedInRole2ByMe).concat(joinedInRole3ByMe).concat(joinedInRole4ByMe).concat(joinedInRole5ByMe).unique()
   }
 
   findET(name) {
