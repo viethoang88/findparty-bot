@@ -21,9 +21,13 @@ module.exports = {
 			case ET_TYPE:
 				joinET(message, args);
 				break;
+			default:
+				// message.channel.send(instance + ' does not exists. Please use ET, Oracle, MVP, BQRIFT, ANY')
+				message.channel.send('Please use ' + varFile.CMD_PREFIX + 'join ET PartyID Slot#.');
+				break;
 			}
 		} else if (isDefined(instance) === false) {
-			message.channel.send('Opps, there is a problem processing your request. Please check your format.');
+			message.channel.send('Please use format: ' + varFile.CMD_PREFIX + 'join ET PartyID Slot#.');
 		} else {
 			message.channel.send('Opps, there is a problem processing your request. Please check your format.');
 		}
