@@ -772,8 +772,10 @@ module.exports = {
 	},
 	moveET: function(message, args) {
 		// const etName = args[1];
+		if (args[1] == null || args[1] == undefined){
+			return message.channel.send('Please specify ET Party ID in your commands.');
+		}
 		const etNameInput = args.splice(1);
-		// logger.debug("etNameInput: " + etNameInput);
 
 		etNameInput.forEach(function(etName) {
 		// logger.debug("etName: " + etName);
@@ -823,12 +825,14 @@ module.exports = {
 						// logger.info(`Channel ID: ${chanId}`);
 						bot.channels.get(chanId).send(embed);
 						message.channel.send(`Party ${newET.name} moved to ${newET.discordChannel}`).then(msg => {
-							msg.delete(2000)
+							msg.delete(3000);
 						})
 					}
 				} else {
 					message.channel.send(`Sorry you cannot move party.`);
 				}
+			} else {
+				message.channel.send(`Cannot move party. No ET Party found for ID: ${etName}`);
 			}
 		});
 	}
