@@ -14,19 +14,32 @@ module.exports = {
 		const helpEmbed = new Discord.RichEmbed()
 			.setTitle(`User manual for creating and finding party`)
 			.setDescription(`Please follow the instructions and use the correct brackets as below. Please use commands carefully, bot is fragile :)`)
-			.addField(`List out all ET parties or specific party (coming soon)`,
-				`Command: ${prefix}list ET or ${prefix}list ET ID\n` +
-				`Example: ${prefix}list ET se42GD\n`)
+			// .addField(`List out all ET parties or specific party (coming soon)`,
+			// 	`Command: ${prefix}list ET or ${prefix}list ET ID\n` +
+			// 	`Example: ${prefix}list ET se42GD\n`)
+			.addField(`List out all ET parties`,
+				`Command: ${prefix}list ET`)
 			.addField(`Create ET party`,
-				`Command: ${prefix}create ET [date and time] (ROM Channel) <#discord-channel> $CUSTOM ROLES$\n` +
-				`Example: ${prefix}create ET [19 May 16:30] (EN14) #et-1 $TANK PRIEST MVP RANGED WIZ$\n` +
-				`Notes: After creation there will be a 5 character ID for each party. Use it in other commands.\n` +
-				`Make sure discord channel exists and starts with # symbol.\n` +
-				`Date in [] brackets will be displayed as you enter there is no processing done on date/time/timezone\n` +
-				`$Roles$ are optional if you don\`t specify roles will be automatically set to TANK PRIEST DPS DPS DPS`)
+				`Simple Command: ${prefix}create ET [date and time] (ROM Channel) <#discord-channel>\n` +
+				`Example: ${prefix}create ET [19 May 16:30] (EN14) #et-1\n` +
+				`---\n` +
+				`Full Command: ${prefix}create ET PartyID [date and time] (ROM Channel) <#discord-channel> $CUSTOM ROLES$\n` +
+				`Example: ${prefix}create ET AwesomeParty [19 May 16:30] (EN14) #et-1 $TANK PRIEST DPS DPS WIZ$\n` +
+				`---\n` +
+				`Notes: \n` +
+				`- Make sure the discord channel exists and starts with # symbol.\n` +
+				`- Date in [] brackets will be displayed as you enter there is no processing done on date/time/timezone\n` +
+				`- $Roles$ are optional. If you don\'t specify, roles will be automatically set to TANK PRIEST DPS DPS DPS\n` +
+				`- PartyID is optional. If you don\'t specify, a 5 character ID will be generated and you can use it in other commands.`)
 			.addField(`Join ET party`,
 				`Command: ${prefix}join ET ID slot#\n` +
 				`Example: ${prefix}join ET se42GD 2`)
+			.addField(`Add others to ET party`,
+				`Command: ${prefix}add ET ID slot# @person\n` +
+				`Example: ${prefix}add ET 12345 1 @Shelli`)
+			.addField(`Replacing others in ET party`,
+				`Command: ${prefix}replace ET ID slot# @person\n` +
+				`Example: ${prefix}replace ET 12345 1 @SilvStar`)
 			.addField(`Leave ET party`,
 				`Command: ${prefix}leave ET ID\n (reason)` +
 				`Example: ${prefix}leave ET se42GD (I am not feeling well)`)
