@@ -836,14 +836,16 @@ module.exports = {
 					const discordChannelMatch = String(newET.discordChannel).match(/\<\#(.*?)\>/);
 					if (discordChannelMatch) {
 						const chanId = String(discordChannelMatch[1]);
-						// logger.info(`Channel ID: ${chanId}`);
+						if (bot.channels.get(chanId) === undefined) {
+							return message.channel.send('Sorry, cannot move party as the discord channel does not exist.');
+						}
 						bot.channels.get(chanId).send(embed);
 						message.channel.send(`Party ${newET.name} moved to ${newET.discordChannel}`).then(msg => {
 							msg.delete(3000);
 						})
 					}
 				} else {
-					message.channel.send(`Sorry you cannot move party.`);
+					message.channel.send(`Sorry you cannot move this party.`);
 				}
 			} else {
 				message.channel.send(`Cannot move party. No ET Party found for ID: ${etName}`);
