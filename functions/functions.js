@@ -19,8 +19,9 @@ module.exports = {
 				`Example: ${prefix}list ET se42GD\n`)
 			.addField(`Create ET party`,
 				`Command: ${prefix}create ET [date and time] (ROM Channel) <#discord-channel> $CUSTOM ROLES$\n` +
-				`Example: ${prefix}create ET [19 May 16:30] (EN14) <#et-1> $TANK PRIEST MVP RANGED WIZ$\n` +
-				`Notes: After creation there will be 5 character ID for each party. Use it in other commands\n` +
+				`Example: ${prefix}create ET [19 May 16:30] (EN14) #et-1 $TANK PRIEST MVP RANGED WIZ$\n` +
+				`Notes: After creation there will be a 5 character ID for each party. Use it in other commands.\n` +
+				`Make sure discord channel exists and starts with # symbol.\n` +
 				`Date in [] brackets will be displayed as you enter there is no processing done on date/time/timezone\n` +
 				`$Roles$ are optional if you don\`t specify roles will be automatically set to TANK PRIEST DPS DPS DPS`)
 			.addField(`Join ET party`,
@@ -166,13 +167,13 @@ module.exports = {
 		}
 
 		// DISCORD CHANNEL IS IN <> brackets
-		const discordChannelMatches = String(args).match(/\<(\<.*?\>)\>/);
+		const discordChannelMatches = String(args).match(/\<(.*?)\>/);
 		let discordChannel;
 		if (discordChannelMatches) {
 			// logger.debug(`DISCORD CHANNEL: ${discordChannelMatches}`);
 			discordChannel = '<' + discordChannelMatches[1] + '>';
 		} else {
-			message.channel.send('Please specify an existing discord channel in < > brackets in the command. E.g. <#et-1>');
+			message.channel.send('Please specify an existing discord channel using # in the command. E.g. #et-1');
 			return;
 		}
 
