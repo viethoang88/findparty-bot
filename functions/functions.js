@@ -181,9 +181,14 @@ module.exports = {
 
 		// DISCORD CHANNEL IS IN <> brackets
 		const discordChannelMatches = String(args).match(/\<(.*?)\>/);
+		const discordChannelMatch = String(args).match(/\<\#(.*?)\>/);
 		let discordChannel;
 		if (discordChannelMatches) {
 			// logger.debug(`DISCORD CHANNEL: ${discordChannelMatches}`);
+			const chanId = String(discordChannelMatch[1]);
+			if (bot.channels.get(chanId) === undefined) {
+				return message.channel.send('Sorry, discord channel does not exist. Please use # to check channels and try again.');
+			}
 			discordChannel = '<' + discordChannelMatches[1] + '>';
 		} else {
 			message.channel.send('Please specify an existing discord channel using # in the command. E.g. #et-1');
