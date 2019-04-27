@@ -40,14 +40,23 @@ module.exports = {
 			.addField(`Replacing others in ET party`,
 				`Command: ${prefix}replace ET ID slot# @person\n` +
 				`Example: ${prefix}replace ET 12345 1 @SilvStar`)
+			.addField(`Remove someone from ET party`,
+				`Command: ${prefix}remove ET ID slot#\n` +
+				`Example: ${prefix}remove ET 12345 1`)
 			.addField(`Leave ET party`,
-				`Command: ${prefix}leave ET ID\n (reason)` +
-				`Example: ${prefix}leave ET se42GD (I am not feeling well)`)
+				`Command: ${prefix}leave ET ID (reason)\n` +
+				`Example: ${prefix}leave ET 12345 (Sick)`)
+			.addField('Move a semi-filled party to channel and remove from List',
+				'Command: ${prefix}move ET ID\n' +
+				'Example: ${prefix}move ET 12345\n' +
+				`Notes: Only creator of party or person with permissions can move the party.`)
 			.addField(`Delete ET party`,
 				`Command: ${prefix}delete ET ID\n` +
-				`Example: ${prefix}delete ET se42GD 1fnj12\n` +
+				`Example: ${prefix}delete ET 12345 09876\n` +
 				`Notes: Only creator of party or person with permissions can delete party.`)
-			.setFooter('By our very own FF Entourage management', 'https://cdn.discordapp.com/icons/566782560294928385/3736129398539082770518dc5278911d.png');
+			.addField('List out the parties you are in',
+				`Command: ${prefix}my ET\n`)
+			.setFooter('By our very own FF Entourage team', 'https://cdn.discordapp.com/icons/566782560294928385/3736129398539082770518dc5278911d.png');
 		// message.author.send(helpEmbed)
 		// 	.then(() => {
 		// 		if (message.channel.type === 'dm') return;
