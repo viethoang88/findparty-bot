@@ -23,14 +23,14 @@ module.exports = {
 				`Simple Command: ${prefix}create ET [date and time] (ROM Channel) <#discord-channel>\n` +
 				`Example: ${prefix}create ET [19 May 16:30] (EN14) #et-1\n` +
 				`---\n` +
-				`Full Command: ${prefix}create ET PartyID [date and time] (ROM Channel) <#discord-channel> $CUSTOM ROLES$\n` +
-				`Example: ${prefix}create ET AwesomeParty [19 May 16:30] (EN14) #et-1 $TANK PRIEST DPS DPS WIZ$\n` +
+				`Full Command: ${prefix}create ET [date and time] (ROM Channel) <#discord-channel> $CUSTOM ROLES$\n` +
+				`Example: ${prefix}create ET [19 May 16:30] (EN14) #et-1 $TANK PRIEST DPS DPS WIZ$\n` +
 				`---\n` +
 				`Notes: \n` +
 				`- Make sure the discord channel exists and starts with # symbol.\n` +
 				`- Date in [] brackets will be displayed as you enter there is no processing done on date/time/timezone\n` +
 				`- $Roles$ are optional. If you don\'t specify, roles will be automatically set to TANK PRIEST DPS DPS DPS\n` +
-				`- PartyID is optional. If you don\'t specify, a 5 character ID will be generated and you can use it in other commands.`)
+				`- A 5 character party ID will be generated and you can use it in other commands.`)
 			.addField(`Join ET party`,
 				`Command: ${prefix}join ET ID slot#\n` +
 				`Example: ${prefix}join ET se42GD 2`)

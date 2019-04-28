@@ -53,7 +53,7 @@ bot.on('message', (message) => {
 	const cmd = command;
 	var channelID = message.channel.id;
 
-	if (channelID !== varFile.BOT_CMD_SPAM_CHANNEL_ID && channelID !== varFile.BOT_CMD_TEST_CHANNEL_ID && message.channel.type !== 'dm') {
+	if (channelID !== varFile.BOT_CMD_SPAM_CHANNEL_ID && channelID !== varFile.BOT_CMD_TEST_CHANNEL_ID && channelID !== varFile.BOT_CMD_ET_CHANNEL_ID && message.channel.type !== 'dm') {
 		message.reply(`Please use command in <#${varFile.BOT_CMD_TEST_CHANNEL_ID}>`).then(msg => {
 			setTimeout(function() {
 				message.delete();

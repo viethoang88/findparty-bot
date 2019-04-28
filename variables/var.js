@@ -4,7 +4,7 @@ const DBModule = require('../db.js');
 module.exports = {
 	bot: new Discord.Client(),
 	DB: new DBModule(),
-	CMD_PREFIX: '-',
+	CMD_PREFIX: '.',
 	prefix: this.CMD_PREFIX,
 	ET_TYPE: 'et',
 	ORACLE_TYPE: 'oracle',
@@ -24,6 +24,7 @@ module.exports = {
 	MEELEE_DPS_ROLE_ID: '571085745343823876',
 	BOT_CMD_SPAM_CHANNEL_ID: '565659187481149450',
 	BOT_CMD_TEST_CHANNEL_ID: '569957280179683403',
+	BOT_CMD_ET_CHANNEL_ID: '568369900528336906',
 	// BOT_CMD_SPAM_CHANNEL_ID: '571114866564136963', // dev-test channel id
 	ET_PARTY_CHANNEL_ID: '571101290571104256'
 };
