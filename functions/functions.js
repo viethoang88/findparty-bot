@@ -825,27 +825,27 @@ module.exports = {
 						}
 	
 						if (newET.role2Alt) {
-							embed.addField(`1. ${newET.role2Name}`, newET.role2User === null ? `Empty` : `<@${newET.role2User}> - ALT/Slave`)
+							embed.addField(`2. ${newET.role2Name}`, newET.role2User === null ? `Empty` : `<@${newET.role2User}> - ALT/Slave`)
 						} else {
-							embed.addField(`1. ${newET.role2Name}`, newET.role2User === null ? `Empty` : `<@${newET.role2User}>`)
+							embed.addField(`2. ${newET.role2Name}`, newET.role2User === null ? `Empty` : `<@${newET.role2User}>`)
 						}
 	
 						if (newET.role3Alt) {
-							embed.addField(`1. ${newET.role3Name}`, newET.role3User === null ? `Empty` : `<@${newET.role3User}> - ALT/Slave`)
+							embed.addField(`3. ${newET.role3Name}`, newET.role3User === null ? `Empty` : `<@${newET.role3User}> - ALT/Slave`)
 						} else {
-							embed.addField(`1. ${newET.role3Name}`, newET.role3User === null ? `Empty` : `<@${newET.role3User}>`)
+							embed.addField(`3. ${newET.role3Name}`, newET.role3User === null ? `Empty` : `<@${newET.role3User}>`)
 						}
 	
 						if (newET.role4Alt) {
-							embed.addField(`1. ${newET.role4Name}`, newET.role4User === null ? `Empty` : `<@${newET.role4User}> - ALT/Slave`)
+							embed.addField(`4. ${newET.role4Name}`, newET.role4User === null ? `Empty` : `<@${newET.role4User}> - ALT/Slave`)
 						} else {
-							embed.addField(`1. ${newET.role4Name}`, newET.role4User === null ? `Empty` : `<@${newET.role4User}>`)
+							embed.addField(`4. ${newET.role4Name}`, newET.role4User === null ? `Empty` : `<@${newET.role4User}>`)
 						}
 	
 						if (newET.role5Alt) {
-							embed.addField(`1. ${newET.role5Name}`, newET.role5User === null ? `Empty` : `<@${newET.role5User}> - ALT/Slave`)
+							embed.addField(`5. ${newET.role5Name}`, newET.role5User === null ? `Empty` : `<@${newET.role5User}> - ALT/Slave`)
 						} else {
-							embed.addField(`1. ${newET.role5Name}`, newET.role5User === null ? `Empty` : `<@${newET.role5User}>`)
+							embed.addField(`5. ${newET.role5Name}`, newET.role5User === null ? `Empty` : `<@${newET.role5User}>`)
 						}
 					const discordChannelMatch = String(newET.discordChannel).match(/\<\#(.*?)\>/);
 					if (discordChannelMatch) {
