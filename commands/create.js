@@ -9,13 +9,14 @@ const ET_TYPE = varFile.ET_TYPE;
 module.exports = {
 	name: 'create',
 	description: 'This command is for creating a new ET party',
-	format: 'ET [date and time] (ROM Channel) #discord-channel $CUSTOM ROLES$',
-	example: 'ET [19 May 16:30] (EN14) #et-1 $TANK PRIEST MVP RANGED WIZ$',
+	format: 'ET :OptionalPartyName: [date and time] (ROM Channel) #discord-channel $CUSTOM ROLES$',
+	example: 'ET :AwesomeParty: [19 May 16:30] (EN14) #et-1 $TANK PRIEST MVP RANGED WIZ$',
 	notes: 'After creation there will be 5 character ID for each party. Use it for other commands.\n' +
 		'- *_[Date]_* must be in *_[ ]_* brackets and format *_DD MMM_*. E.g. *_19 Dec_*\n' +
 		'- *_(Channel)_* must be in *_( )_* brackets. \n' +
 		'- *_#Discord-Channel_* Starts with #. Make sure the room exist. \n' +
-		'- *_$Roles$_* should be in between *_$ $_*. If you don\'t specify, roles will be set to default TANK PRIEST DPS DPS DPS',
+		'- *_$Roles$_* in between * * are optional. If you don\'t specify, roles will be set to default TANK PRIEST DPS DPS DPS \n' +
+		'- *_:PartyID:_* in between : : is optional. If you don\'t specify, a 5 character ID will be generated and you can use it in other commands. \n',
 	group: 'party-finder',
 	execute(message, args) {
 		const instance = args[0];
