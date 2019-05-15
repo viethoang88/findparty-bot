@@ -167,6 +167,7 @@ module.exports = {
 		let customId;
 		if (idMatches) {
 			customId = idMatches[1].replace(new RegExp(`,`, `g`), ``).replace(new RegExp(` `, `g`), ``);
+			args = String(args).replace(idMatches[0],'');
 		}
 
 		// DATE TIME IS IN [] brackets
@@ -174,6 +175,7 @@ module.exports = {
 		let dateTime;
 		if (dateMatches) {
 			dateTime = dateMatches[1].replace(new RegExp(`,`, `g`), ` `);
+			args = String(args).replace(dateMatches[0],'');
 		} else {
 			message.channel.send('Please specify the date and time in [ ] brackets in the command.');
 			return;
