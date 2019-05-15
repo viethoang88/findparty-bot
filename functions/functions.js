@@ -126,10 +126,30 @@ module.exports = {
 			});
 		}
 		
-		if(args[1] == 'all') {
+		let options = '';
+		if (this.isDefined(args[1])) {
+			options = args[1].split(/\$+/);
+		}
+		if(args[1] == 'all' ) {
 			results.forEach(et => {
 				this.displayLFPResultNoNotif(message, et, ET_TYPE);
 			});
+		} else if(options[0] == 'all' && options[1] == 'id') {
+			let etIDs = '';
+			results.forEach(et => {
+				etIDs += `${et.name} `;
+			});
+			let outputMessage = `The ET Party IDs are: ${etIDs}`;
+			if (etIDs !== '') {
+				message.channel.send(outputMessage).then(msg => {
+					if (AUTO_DELETE_MODE) {
+						setTimeout(function() {
+							message.delete();
+							msg.delete();
+						}, AUTO_DELETE_TIME);
+					}
+				});
+			}
 		} else {
 			results.forEach(et => {
 				if (et.status === "OPEN") {

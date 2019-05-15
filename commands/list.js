@@ -10,10 +10,14 @@ module.exports = {
 	group: 'party-finder',
 	execute(message, args) {
 		const instance = args[0];
+		let options = '';
+		if (func.isDefined(args[1])) {
+			options = args[1].split(/\$+/);
+		}
 		if (args.length > 0 && func.isDefined(instance)) {
 			switch(instance.toLowerCase()) {
 			case varFile.ET_TYPE:
-				if(args[1] == 'all') {
+				if(args[1] == 'all' || options[0] == 'all') {
 					var results = varFile.DB.findAllET();
 				} else {
 					var results = varFile.DB.findOpenET();
