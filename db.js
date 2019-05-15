@@ -47,8 +47,12 @@ class DBModule {
     return text
   }
 
+  findOpenET() {
+    return etDB.find({status: "OPEN"});
+  }
+
   findAllET() {
-    return etDB.find({status: "OPEN"})
+    return etDB.find();
   }
 
   findMyETs(userId) {

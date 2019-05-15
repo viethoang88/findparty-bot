@@ -103,8 +103,60 @@ module.exports = {
 			}
 		});
 	},
+	displayETResults: function(message, args, results) {
+		if (results.length == 0) {
+			message.channel.send(`No ET party has been created.`)
+			.then(msg => {
+				if (AUTO_DELETE_MODE) {
+					setTimeout(function() {
+						message.delete();
+						msg.delete();
+					}, AUTO_DELETE_TIME);
+				}
+			});
+		} else {
+			message.channel.send(`There are ${results.length} ET parties.`)
+			.then(msg => {
+				if (AUTO_DELETE_MODE) {
+					setTimeout(function() {
+						message.delete();
+						msg.delete();
+					}, AUTO_DELETE_TIME);
+				}
+			});
+		}
+		
+		if(args[1] == 'all') {
+			results.forEach(et => {
+				this.displayLFPResultNoNotif(message, et, ET_TYPE);
+			});
+		} else {
+			results.forEach(et => {
+				if (et.status === "OPEN") {
+					this.displayLFPResult(message, et, ET_TYPE);
+				}
+			});
+		}
+	},
 	displayLFPResult: function(message, result, type) {
 		const embed = this.getEmbed(result, ET_TYPE);
+		switch(type) {
+		case ET_TYPE:
+			if (embed !== null) {
+				message.channel.send(embed).then(msg => {
+					if (AUTO_DELETE_MODE) {
+						setTimeout(function() {
+							message.delete();
+							msg.delete();
+						}, AUTO_DELETE_TIME);
+					}
+				});
+			}
+			break;
+		}
+	},
+	displayLFPResultNoNotif: function(message, result, type) {
+		const embed = this.getEmbedNoNotif(result, ET_TYPE);
 		switch(type) {
 		case ET_TYPE:
 			if (embed !== null) {
@@ -155,6 +207,47 @@ module.exports = {
 					embed.addField(`5. ${model.role5Name}`, model.role5User === null ? `Empty` : `<@${model.role5User}> - ALT/Slave`);
 				} else {
 					embed.addField(`5. ${model.role5Name}`, model.role5User === null ? `Empty` : `<@${model.role5User}>`)
+				}
+			return embed;
+		} else {
+			return null;
+		}
+	},
+	getEmbedNoNotif: function(model, type) {
+		if (type === ET_TYPE) {
+			const embed = new Discord.RichEmbed()
+				.setTitle(`ET ID: ${model.name} | [${model.date}] (${model.romChannel})`)
+				.setColor(model.color)
+				.setDescription(`${model.discordChannel}`)
+				.setAuthor(`${bot.users.get(model.createdBy).username}`, `${bot.users.get(model.createdBy).avatarURL}`);
+				if (model.role1Alt) {
+					embed.addField(`1. ${model.role1Name}`, model.role1User === null ? `Empty` : `${bot.users.get(model.role1User).tag} - ALT/Slave`);
+				} else {
+					embed.addField(`1. ${model.role1Name}`, model.role1User === null ? `Empty` : `${bot.users.get(model.role1User).tag}`)
+				}
+
+				if (model.role2Alt) {
+					embed.addField(`2. ${model.role2Name}`, model.role2User === null ? `Empty` : `${bot.users.get(model.role2User).tag} - ALT/Slave`);
+				} else {
+					embed.addField(`2. ${model.role2Name}`, model.role2User === null ? `Empty` : `${bot.users.get(model.role2User).tag}`)
+				}
+
+				if (model.role3Alt) {
+					embed.addField(`3. ${model.role3Name}`, model.role3User === null ? `Empty` : `${bot.users.get(model.role3User).tag} - ALT/Slave`);
+				} else {
+					embed.addField(`3. ${model.role3Name}`, model.role3User === null ? `Empty` : `${bot.users.get(model.role3User).tag}`)
+				}
+
+				if (model.role4Alt) {
+					embed.addField(`4. ${model.role4Name}`, model.role4User === null ? `Empty` : `${bot.users.get(model.role4User).tag} - ALT/Slave`);
+				} else {
+					embed.addField(`4. ${model.role4Name}`, model.role4User === null ? `Empty` : `${bot.users.get(model.role4User).tag}`)
+				}
+
+				if (model.role5Alt) {
+					embed.addField(`5. ${model.role5Name}`, model.role5User === null ? `Empty` : `${bot.users.get(model.role5User).tag} - ALT/Slave`);
+				} else {
+					embed.addField(`5. ${model.role5Name}`, model.role5User === null ? `Empty` : `${bot.users.get(model.role5User).tag}`)
 				}
 			return embed;
 		} else {

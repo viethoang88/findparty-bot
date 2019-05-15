@@ -13,9 +13,13 @@ module.exports = {
 		if (args.length > 0 && func.isDefined(instance)) {
 			switch(instance.toLowerCase()) {
 			case varFile.ET_TYPE:
-				var results = varFile.DB.findAllET();
+				if(args[1] == 'all') {
+					var results = varFile.DB.findAllET();
+				} else {
+					var results = varFile.DB.findOpenET();
+				}
 				// logger.debug(`Found ETs: ${results}`);
-				func.displayLFPETResults(message, results);
+				func.displayETResults(message, args, results);
 				break;
 			default:
 				// message.channel.send(instance + ' does not exists. Please use ET, Oracle, MVP, BQRIFT, ANY')
