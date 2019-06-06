@@ -1,5 +1,6 @@
 const varFile = require('../variables/var.js');
 const func = require('../functions/functions.js');
+const etfunc = require('../functions/et-functions.js');
 // const logger = require('winston');
 
 module.exports = {
