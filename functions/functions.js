@@ -899,20 +899,6 @@ module.exports = {
 			}
 		});
 	},
-	showMyETs: function(message) {
-		const results = DB.findMyETs(message.author.id);
-		message.channel.send(`You have joined ${results.length} ET parties`)
-			.then(msg => {
-			// setTimeout(function () {
-			//     msg.delete();
-			// }, 5000)
-			});
-
-		results.forEach(et => {
-			const embed = module.exports.getEmbed(et, ET_TYPE)
-			message.channel.send(embed);
-		});
-	},
 	moveET: function(message, args) {
 		// const etName = args[1];
 		if (args[1] == null || args[1] == undefined){

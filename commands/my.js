@@ -4,7 +4,7 @@ const etfunc = require('../functions/et-functions.js');
 // const logger = require('winston');
 
 const isDefined = func.isDefined;
-const showMyETs = func.showMyETs;
+const showMyETs = etfunc.showMyETs;
 const ET_TYPE = varFile.ET_TYPE;
 
 module.exports = {
