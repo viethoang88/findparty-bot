@@ -32,7 +32,7 @@ module.exports = {
 		if (idMatches) {
 			customId = idMatches[1].replace(new RegExp(`,`, `g`), ``).replace(new RegExp(` `, `g`), ``);
 			const customNameExists = DB.doesETNameExist(customId);
-			logger.info('customNameExists: ' + customNameExists);
+			// logger.info('customNameExists: ' + customNameExists);
 			if (customNameExists) {
 				message.channel.send('Please choose another party name. This name has been used.');
 				return;
