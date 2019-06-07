@@ -135,6 +135,13 @@ class DBModule {
   deleteET(name) {
     etDB.chain().find({name: name}).remove()
   }
+
+	doesETNameExist(name) {
+		if (etDB.findOne({name: name})) {
+			return true;
+		}
+		return false;
+	}
 }
 
 module.exports = DBModule
