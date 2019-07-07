@@ -24,7 +24,7 @@ module.exports = {
 					var results = varFile.DB.findOpenET();
 				}
 				// logger.debug(`Found ETs: ${results}`);
-				func.displayETResults(message, args, results);
+				etfunc.displayETResults(message, args, results);
 				break;
 			default:
 				// message.channel.send(instance + ' does not exists. Please use ET, Oracle, MVP, BQRIFT, ANY')
