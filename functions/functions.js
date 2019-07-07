@@ -159,7 +159,7 @@ module.exports = {
 	// 	}
 	// },
 	displayLFPResult: function(message, result, type) {
-		const embed = this.getEmbed(result, ET_TYPE);
+		const embed = this.getEmbed(result, type);
 		switch(type) {
 		case ET_TYPE:
 			if (embed !== null) {
@@ -176,7 +176,7 @@ module.exports = {
 		}
 	},
 	displayLFPResultNoNotif: function(message, result, type) {
-		const embed = this.getEmbedNoNotif(result, ET_TYPE);
+		const embed = this.getEmbedNoNotif(result, type);
 		switch(type) {
 		case ET_TYPE:
 			if (embed !== null) {
@@ -198,7 +198,7 @@ module.exports = {
 				.setTitle(`ET ID: ${model.name} | [${model.date}] (${model.romChannel})`)
 				.setColor(model.color)
 				.setDescription(`${model.discordChannel}`)
-				.setAuthor(`${bot.users.get(model.createdBy).username}`, `${bot.users.get(model.createdBy).avatarURL}`);
+				.setAuthor(`${bot.users.get(model.createdBy).username}`, `${bot.users.get(model.createdBy).displayAvatarURL}`);
 				if (model.role1Alt) {
 					embed.addField(`1. ${model.role1Name}`, model.role1User === null ? `Empty` : `<@${model.role1User}> - ALT/Slave`);
 				} else {
@@ -239,7 +239,7 @@ module.exports = {
 				.setTitle(`ET ID: ${model.name} | [${model.date}] (${model.romChannel})`)
 				.setColor(model.color)
 				.setDescription(`${model.discordChannel}`)
-				.setAuthor(`${bot.users.get(model.createdBy).username}`, `${bot.users.get(model.createdBy).avatarURL}`);
+				.setAuthor(`${bot.users.get(model.createdBy).username}`, `${bot.users.get(model.createdBy).displayAvatarURL}`);
 				if (model.role1Alt) {
 					embed.addField(`1. ${model.role1Name}`, model.role1User === null ? `Empty` : `${bot.users.get(model.role1User).tag} - ALT/Slave`);
 				} else {
