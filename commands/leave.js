@@ -4,7 +4,7 @@ const etfunc = require('../functions/et-functions.js');
 // const logger = require('winston');
 
 const isDefined = func.isDefined;
-const leaveETParty = func.leaveETParty;
+const leaveParty = func.leaveParty;
 const ET_TYPE = varFile.ET_TYPE;
 
 module.exports = {
@@ -19,15 +19,7 @@ module.exports = {
 		// logger.info('args: ' + args);
 
 		if (args.length > 0 && isDefined(instance)) {
-			switch(instance.toLowerCase()) {
-			case ET_TYPE:
-				leaveETParty(message, args);
-				break;
-			default:
-				// message.channel.send(instance + ' does not exists. Please use ET, Oracle, MVP, BQRIFT, ANY')
-				message.channel.send('Please use ' + varFile.CMD_PREFIX + 'leave **ET** PartyID (reason).');
-				break;
-			}
+			leaveParty(message, args);
 		} else if (isDefined(instance) === false) {
 			message.channel.send('Please use ' + varFile.CMD_PREFIX + 'leave **ET** PartyID (reason).');
 		} else {

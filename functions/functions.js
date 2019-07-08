@@ -103,61 +103,6 @@ module.exports = {
 			}
 		});
 	},
-	// displayETResults: function(message, args, results) {
-	// 	if (results.length == 0) {
-	// 		message.channel.send(`No ET party has been created.`)
-	// 		.then(msg => {
-	// 			if (AUTO_DELETE_MODE) {
-	// 				setTimeout(function() {
-	// 					message.delete();
-	// 					msg.delete();
-	// 				}, AUTO_DELETE_TIME);
-	// 			}
-	// 		});
-	// 	} else {
-	// 		message.channel.send(`There are ${results.length} ET parties.`)
-	// 		.then(msg => {
-	// 			if (AUTO_DELETE_MODE) {
-	// 				setTimeout(function() {
-	// 					message.delete();
-	// 					msg.delete();
-	// 				}, AUTO_DELETE_TIME);
-	// 			}
-	// 		});
-	// 	}
-		
-	// 	let options = '';
-	// 	if (this.isDefined(args[1])) {
-	// 		options = args[1].split(/\$+/);
-	// 	}
-	// 	if(args[1] == 'all' ) {
-	// 		results.forEach(et => {
-	// 			this.displayLFPResultNoNotif(message, et, ET_TYPE);
-	// 		});
-	// 	} else if(options[0] == 'all' && options[1] == 'id') {
-	// 		let etIDs = '';
-	// 		results.forEach(et => {
-	// 			etIDs += `${et.name} `;
-	// 		});
-	// 		let outputMessage = `The ET Party IDs are: ${etIDs}`;
-	// 		if (etIDs !== '') {
-	// 			message.channel.send(outputMessage).then(msg => {
-	// 				if (AUTO_DELETE_MODE) {
-	// 					setTimeout(function() {
-	// 						message.delete();
-	// 						msg.delete();
-	// 					}, AUTO_DELETE_TIME);
-	// 				}
-	// 			});
-	// 		}
-	// 	} else {
-	// 		results.forEach(et => {
-	// 			if (et.status === "OPEN") {
-	// 				this.displayLFPResult(message, et, ET_TYPE);
-	// 			}
-	// 		});
-	// 	}
-	// },
 	displayLFPResult: function(message, result, type) {
 		const embed = this.getEmbed(result, type);
 		switch(type) {
@@ -756,44 +701,53 @@ module.exports = {
 			message.channel.send('Please check that PartyID, Slot# and User are stated in your command. E.g. ' + prefix + 'replace ET **12345 2 @SilvStar**');
 		}
 	},
-	leaveETParty: function(message, args) {
-		const etName = args[1];
-		let et = DB.findET(etName);
+	leaveParty: function(message, args) {
+		const instance = args[0];
+		const partyName = args[1];
 		const reasonMatches = String(args).match(/\((.*?)\)/);
 		let reason = `N/A`;
 		if (reasonMatches) {
 			reason = reasonMatches[1].replace(new RegExp(`,`, `g`), ` `);
 		}
 
-		if (et !== null) {
-			if (et.role1User && et.role1User === message.author.id) {
-				et.role1User = null;
-			}
+		switch(instance.toLowerCase()) {
+		case ET_TYPE:
+			let et = DB.findET(partyName);
+			if (et !== null) {
+				if (et.role1User && et.role1User === message.author.id) {
+					et.role1User = null;
+				}
 
-			if (et.role2User && et.role2User === message.author.id) {
-				et.role2User = null;
-			}
+				if (et.role2User && et.role2User === message.author.id) {
+					et.role2User = null;
+				}
 
-			if (et.role3User && et.role3User === message.author.id) {
-				et.role3User = null;
-			}
+				if (et.role3User && et.role3User === message.author.id) {
+					et.role3User = null;
+				}
 
-			if (et.role4User && et.role4User === message.author.id) {
-				et.role4User = null;
-			}
+				if (et.role4User && et.role4User === message.author.id) {
+					et.role4User = null;
+				}
 
-			if (et.role5User && et.role5User === message.author.id) {
-				et.role5User = null;
-			}
+				if (et.role5User && et.role5User === message.author.id) {
+					et.role5User = null;
+				}
 
-			if (et.status === "FULL") {
-				et.status = "OPEN"
-			}
+				if (et.status === "FULL") {
+					et.status = "OPEN"
+				}
 
-			DB.updateET(et);
-			message.channel.send(`<@${message.author.id}> has left ${etName} reason: ${reason}`);
-		} else {
-			message.channel.send(`Party not found please check ID again.`);
+				DB.updateET(et);
+				message.channel.send(`<@${message.author.id}> has left ${partyName} reason: ${reason}`);
+			} else {
+				message.channel.send(`Party not found please check ID again.`);
+			}
+			break;
+		default:
+			// message.channel.send(instance + ' does not exists. Please use ET, Oracle, MVP, BQRIFT, ANY')
+			message.channel.send('Please use ' + varFile.CMD_PREFIX + 'leave **ET** PartyID (reason).');
+			break;
 		}
 	},
 	deleteETParty: function(message, args) {
