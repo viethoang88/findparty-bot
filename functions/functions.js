@@ -173,6 +173,12 @@ module.exports = {
 				} else {
 					embed.addField(`5. ${model.role5Name}`, model.role5User === null ? `Empty` : `<@${model.role5User}>`)
 				}
+
+				if (model.role6Alt) {
+					embed.addField(`6. ${model.role6Name}`, model.role6User === null ? `Empty` : `<@${model.role6User}> - ALT/Slave`);
+				} else {
+					embed.addField(`6. ${model.role6Name}`, model.role6User === null ? `Empty` : `<@${model.role6User}>`)
+				}
 			return embed;
 		} else {
 			return null;
@@ -214,6 +220,12 @@ module.exports = {
 				} else {
 					embed.addField(`5. ${model.role5Name}`, model.role5User === null ? `Empty` : `${bot.users.get(model.role5User).tag}`)
 				}
+
+				if (model.role6Alt) {
+					embed.addField(`6. ${model.role6Name}`, model.role6User === null ? `Empty` : `${bot.users.get(model.role6User).tag} - ALT/Slave`);
+				} else {
+					embed.addField(`6. ${model.role6Name}`, model.role6User === null ? `Empty` : `${bot.users.get(model.role6User).tag}`)
+				}
 			return embed;
 		} else {
 			return null;
@@ -225,7 +237,7 @@ module.exports = {
 
 		var tags = '';
 
-		if (etParty.role1User !== null && etParty.role2User !== null && etParty.role3User !== null && etParty.role4User !== null && etParty.role5User !== null) {
+		if (etParty.role1User !== null && etParty.role2User !== null && etParty.role3User !== null && etParty.role4User !== null && etParty.role5User !== null && etParty.role6User !== null) {
 			// PARTY IS FULL 
 			message.reply(`Party is already full.`)
 			return 
@@ -238,14 +250,14 @@ module.exports = {
 
 		if (etParty != null) {
 			if ((etParty.role1Name === "ANY" && etParty.role1User === null) || (etParty.role2Name === "ANY" && etParty.role2User === null) || (etParty.role3Name === "ANY" && etParty.role3User === null)
-			|| (etParty.role4Name === "ANY" && etParty.role4User === null) || (etParty.role5Name === "ANY" && etParty.role5User === null)) {
+			|| (etParty.role4Name === "ANY" && etParty.role4User === null) || (etParty.role5Name === "ANY" && etParty.role5User === null) || (etParty.role6Name === "ANY" && etParty.role6User === null)) {
 				tags += `<@&${varFile.TANK_ROLE_ID}>, <@&${varFile.HEALS_ROLE_ID}>, <@&${varFile.WIZ_ROLE_ID}>, <@&${varFile.RANGE_DPS_ROLE_ID}>, <@&${varFile.MEELEE_DPS_ROLE_ID}>`
 				message.channel.send(tags)
 				return 
 			}
 
 			if ((etParty.role1Name === "TANK" && etParty.role1User === null) || (etParty.role2Name === "TANK" && etParty.role2User === null) || (etParty.role3Name === "TANK" && etParty.role3User === null)
-			|| (etParty.role4Name === "TANK" && etParty.role4User === null) || (etParty.role5Name === "TANK" && etParty.role5User === null)) {
+			|| (etParty.role4Name === "TANK" && etParty.role4User === null) || (etParty.role5Name === "TANK" && etParty.role5User === null) || (etParty.role6Name === "TANK" && etParty.role6User === null)) {
 				if (tags.length == 0) {
 					tags += `<@&${varFile.TANK_ROLE_ID}>`
 				} else {
@@ -254,7 +266,7 @@ module.exports = {
 			}
 
 			if ((etParty.role1Name === "PRIEST" && etParty.role1User === null) || (etParty.role2Name === "PRIEST" && etParty.role2User === null) || (etParty.role3Name === "PRIEST" && etParty.role3User === null)
-			|| (etParty.role4Name === "PRIEST" && etParty.role4User === null) || (etParty.role5Name === "PRIEST" && etParty.role5User === null)) {
+			|| (etParty.role4Name === "PRIEST" && etParty.role4User === null) || (etParty.role5Name === "PRIEST" && etParty.role5User === null) || (etParty.role6Name === "PRIEST" && etParty.role6User === null)) {
 				if (tags.length == 0) {
 					tags += `<@&${varFile.HEALS_ROLE_ID}>`
 				} else {
@@ -263,7 +275,7 @@ module.exports = {
 			}
 
 			if ((etParty.role1Name === "DPS" && etParty.role1User === null) || (etParty.role2Name === "DPS" && etParty.role2User === null) || (etParty.role3Name === "DPS" && etParty.role3User === null)
-			|| (etParty.role4Name === "DPS" && etParty.role4User === null) || (etParty.role5Name === "DPS" && etParty.role5User === null)) {
+			|| (etParty.role4Name === "DPS" && etParty.role4User === null) || (etParty.role5Name === "DPS" && etParty.role5User === null) || (etParty.role6Name === "DPS" && etParty.role6User === null)) {
 				if (tags.length == 0) {
 					tags += `<@&${varFile.MEELEE_DPS_ROLE_ID}>, <@&${varFile.RANGE_DPS_ROLE_ID}>, <@&${varFile.WIZ_ROLE_ID}>`
 				} else {
@@ -273,7 +285,7 @@ module.exports = {
 
 			if (tags.indexOf(varFile.WIZ_ROLE_ID) == -1) {
 				if ((etParty.role1Name === "WIZ" && etParty.role1User === null) || (etParty.role2Name === "WIZ" && etParty.role2User === null) || (etParty.role3Name === "WIZ" && etParty.role3User === null)
-				|| (etParty.role4Name === "WIZ" && etParty.role4User === null) || (etParty.role5Name === "WIZ" && etParty.role5User === null)) {
+				|| (etParty.role4Name === "WIZ" && etParty.role4User === null) || (etParty.role5Name === "WIZ" && etParty.role5User === null) || (etParty.role6Name === "WIZ" && etParty.role6User === null)) {
 					if (tags.length == 0) {
 						tags += `<@&${varFile.WIZ_ROLE_ID}>`
 					} else {
@@ -307,7 +319,7 @@ module.exports = {
 
 				var duplicate = false;
 				if (etParty.role1User == userId || etParty.role2User == userId || etParty.role3User == userId || etParty.role4User == userId
-					|| etParty.role5User == userId) {
+					|| etParty.role5User == userId || etParty.role6User == userId) {
 					duplicate = true;
 				}
 
@@ -352,12 +364,18 @@ module.exports = {
 							etParty.role5Alt = true
 						}
 						break;
+					case `6`:
+						etParty.role6User = userId;
+						if (alt != null || alt != undefined) {
+							etParty.role6Alt = true
+						}
+						break;
 					}
 
 					const newET = DB.updateET(etParty);
 					const embed = module.exports.getEmbed(newET, ET_TYPE)
 					message.channel.send(embed).then(msg => {
-						if (newET.role1User !== null && newET.role2User !== null && newET.role3User !== null && newET.role4User !== null && newET.role5User !== null) {
+						if (newET.role1User !== null && newET.role2User !== null && newET.role3User !== null && newET.role4User !== null && newET.role5User !== null && newET.role6User !== null) {
 							// logger.info(`Saved discord ID: ` + newET.discordChannel);
 							newET.status = "FULL"
 							DB.updateET(newET)
@@ -377,7 +395,7 @@ module.exports = {
 				message.channel.send(`ET Party not found.`);
 			}
 		} else {
-			message.channel.send(`Command not used correctly. Please check that PartyID is included, role number is 1-5 and also tag the user accordingly.`);
+			message.channel.send(`Command not used correctly. Please check that PartyID is included, role number is 1-6 and also tag the user accordingly.`);
 		}
 	},
 	removeETUser: function(message, args) {
@@ -412,6 +430,10 @@ module.exports = {
 					etParty.role5User = null;
 					etParty.role5Alt = false;
 					break;
+				case `6`:
+					etParty.role6User = null;
+					etParty.role6Alt = false;
+					break;
 				}
 
 				const newET = DB.updateET(etParty);
@@ -430,7 +452,7 @@ module.exports = {
 		const role = args[2];
 
 		if (!role) {
-			message.channel.send(`Please specify your role. Use number from 1-5`);
+			message.channel.send(`Please specify your role. Use number from 1-6`);
 			return;
 		}
 
@@ -479,7 +501,7 @@ module.exports = {
 					}
 
 					// if (etParty.role2User === message.author.id || etParty.role3User === message.author.id || etParty.role4User === message.author.id
-					// || etParty.role5User === message.author.id) {
+					// || etParty.role5User === message.author.id || etParty.role6User === message.author.id) {
 					// 	duplicate = true;
 					// }
 				}
@@ -494,7 +516,7 @@ module.exports = {
 					}
 
 					// if (etParty.role1User === message.author.id || etParty.role3User === message.author.id || etParty.role4User === message.author.id
-					// || etParty.role5User === message.author.id) {
+					// || etParty.role5User === message.author.id || etParty.role6User === message.author.id) {
 					// 	duplicate = true;
 					// }
 				}
@@ -509,7 +531,7 @@ module.exports = {
 					}
 
 					// if (etParty.role1User === message.author.id || etParty.role2User === message.author.id || etParty.role4User === message.author.id
-					// || etParty.role5User === message.author.id) {
+					// || etParty.role5User === message.author.id || etParty.role6User === message.author.id) {
 					// 	duplicate = true;
 					// }
 				}
@@ -542,6 +564,16 @@ module.exports = {
 					// 	duplicate = true;
 					// }
 				}
+
+				if (etParty.role6Name !== null && role === `6`) {
+					if (etParty.role6User === null) {
+						etParty.role6User = message.author.id;
+						canJoin = true;
+					} else {
+						message.channel.send(`Sorry you cannot just replace someone like that.`);
+						return;
+					}
+				}
 			}
 
 			// if (canJoin && !duplicate) {
@@ -559,7 +591,7 @@ module.exports = {
 
 				message.channel.send(embed).then(msg => {
 					// if (newET.role1User !== null) { testing purpose
-					if (newET.role1User !== null && newET.role2User !== null && newET.role3User !== null && newET.role4User !== null && newET.role5User !== null) {
+					if (newET.role1User !== null && newET.role2User !== null && newET.role3User !== null && newET.role4User !== null && newET.role5User !== null && newET.role6User !== null) {
 						// logger.info(`Saved discord ID: ` + newET.discordChannel);
 						newET.status = "FULL"
 						DB.updateET(ET)
@@ -619,7 +651,7 @@ module.exports = {
 
 				var duplicate = false;
 				// if (etParty.role1User === user || etParty.role2User === user || etParty.role3User === user || etParty.role4User === user
-				// 	|| etParty.role5User === user) {
+				// 	|| etParty.role5User === user || etParty.role6User === user) {
 				// 	duplicate = true;
 				// }
 
@@ -673,6 +705,15 @@ module.exports = {
 					}
 				}
 
+				if (etParty.role6Name !== null && role === '6') {
+					previousUser = etParty.role6User;
+					previousRoleName = etParty.role6Name;
+					etParty.role6User = user;
+					if (alt != null || alt != undefined) {
+						etParty.role6Alt = true
+					}
+				}
+
 				let newET = DB.updateET(etParty);
 				const embed = module.exports.getEmbed(newET, ET_TYPE)
 
@@ -680,7 +721,7 @@ module.exports = {
 					message.channel.send(`${previousRoleName}: <@${previousUser}> was replaced by <@${user}>`)
 
 					// if (newET.role1User !== null) { testing purpose
-					if (newET.role1User !== null && newET.role2User !== null && newET.role3User !== null && newET.role4User !== null && newET.role5User !== null) {
+					if (newET.role1User !== null && newET.role2User !== null && newET.role3User !== null && newET.role4User !== null && newET.role5User !== null && newET.role6User !== null) {
 						// logger.info(`Saved discord ID: ` + newET.discordChannel);
 						newET.status = "FULL"
 						DB.updateET(ET)
@@ -732,6 +773,10 @@ module.exports = {
 
 				if (et.role5User && et.role5User === message.author.id) {
 					et.role5User = null;
+				}
+
+				if (et.role6User && et.role6User === message.author.id) {
+					et.role6User = null;
 				}
 
 				if (et.status === "FULL") {
@@ -818,6 +863,12 @@ module.exports = {
 							embed.addField(`5. ${newET.role5Name}`, newET.role5User === null ? `Empty` : `<@${newET.role5User}> - ALT/Slave`)
 						} else {
 							embed.addField(`5. ${newET.role5Name}`, newET.role5User === null ? `Empty` : `<@${newET.role5User}>`)
+						}
+	
+						if (newET.role6Alt) {
+							embed.addField(`6. ${newET.role6Name}`, newET.role6User === null ? `Empty` : `<@${newET.role6User}> - ALT/Slave`)
+						} else {
+							embed.addField(`6. ${newET.role6Name}`, newET.role6User === null ? `Empty` : `<@${newET.role6User}>`)
 						}
 					const discordChannelMatch = String(newET.discordChannel).match(/\<\#(.*?)\>/);
 					if (discordChannelMatch) {
