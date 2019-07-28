@@ -61,8 +61,9 @@ class DBModule {
     var joinedInRole3ByMe = etDB.find({role3User: userId})
     var joinedInRole4ByMe = etDB.find({role4User: userId})
     var joinedInRole5ByMe = etDB.find({role5User: userId})
+    var joinedInRole6ByMe = etDB.find({role6User: userId})
 
-    return joinedInRole1ByMe.concat(joinedInRole2ByMe).concat(joinedInRole3ByMe).concat(joinedInRole4ByMe).concat(joinedInRole5ByMe).unique()
+    return joinedInRole1ByMe.concat(joinedInRole2ByMe).concat(joinedInRole3ByMe).concat(joinedInRole4ByMe).concat(joinedInRole5ByMe).concat(joinedInRole6ByMe).unique()
   }
 
   findET(name) {
@@ -94,6 +95,9 @@ class DBModule {
           role5Name: roles[4],
           role5User: null,
           role5Alt: false,
+          role6Name: roles[5],
+          role6User: null,
+          role6Alt: false,
           status: "OPEN",
           queue: []
         }
@@ -120,6 +124,9 @@ class DBModule {
             role5Name: 'DPS',
             role5User: null,
             role5Alt: false,
+            role6Name: 'DPS',
+            role6User: null,
+            role6Alt: false,
             status: "OPEN",
             queue: []
           }

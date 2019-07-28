@@ -136,13 +136,15 @@ module.exports = {
 		let roles = [];
 		if (rolesMatches) {
 			const rolesAsString = rolesMatches[1];
+			// const allRoles = rolesAsString.split(/ +/);
 			const allRoles = rolesAsString.split(`,`);
-			if (args.length > 5) {
+			if (args.length > 6) {
 				roles.push(allRoles[0]);
 				roles.push(allRoles[1]);
 				roles.push(allRoles[2]);
 				roles.push(allRoles[3]);
 				roles.push(allRoles[4]);
+				roles.push(allRoles[5]);
 			}
 		}
 
@@ -157,7 +159,8 @@ module.exports = {
 			.addField(`2. ${newET.role2Name}`, `Empty`)
 			.addField(`3. ${newET.role3Name}`, `Empty`)
 			.addField(`4. ${newET.role4Name}`, `Empty`)
-			.addField(`5. ${newET.role5Name}`, `Empty`);
+			.addField(`5. ${newET.role5Name}`, `Empty`)
+			.addField(`6. ${newET.role6Name}`, `Empty`);
 
 		message.channel.send(embed)
 			.then(msg => {
