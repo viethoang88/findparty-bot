@@ -10,9 +10,9 @@ const prefix = varFile.CMD_PREFIX;
 
 module.exports = {
 	name: 'add',
-	description: 'This command is for adding others to an existing ET party.',
-	format: 'ET partyID slot# @person',
-	example: 'ET se42GD 2 @SilvStar',
+	description: 'This command is for adding others to an existing ET party. Please specify if you\'re using an alt/slave.',
+	format: 'ET partyID slot# @person alt',
+	example: 'ET se42GD 2 @SilvStar alt',
 	group: 'party-finder',
 	// usage: '<ET> <PartyID:string> <SlotNo:int{1,5}> ]',
 	execute(message, args) {

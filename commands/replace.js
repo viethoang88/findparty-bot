@@ -10,9 +10,9 @@ const prefix = varFile.CMD_PREFIX;
 
 module.exports = {
 	name: 'replace',
-	description: 'This command is for replacing registered person with another person.',
-	format: 'ET partyID slot# @person2',
-	example: 'ET se42GD 2 @Shelli',
+	description: 'This command is for replacing registered person with another person. Please specify if you\'re using an alt/slave.',
+	format: 'ET partyID slot# @person2 alt',
+	example: 'ET se42GD 2 @Shelli alt',
 	group: 'party-finder',
 	// usage: '<ET> <PartyID:string> <SlotNo:int{1,5}> ]',
 	execute(message, args) {
