@@ -37,9 +37,15 @@ module.exports = {
 			.addField(`Add others to ET party`,
 				`Command: ${prefix}add ET ID slot# @person\n` +
 				`Example: ${prefix}add ET 12345 1 @Shelli`)
+			.addField(`Adding an alt/slave to ET Party`,
+				`Command: ${prefix}add ET ID slot# @person alt\n` +
+				`Example: ${prefix}add ET 12345 1 @Shelli alt`)
 			.addField(`Replacing others in ET party`,
 				`Command: ${prefix}replace ET ID slot# @person\n` +
 				`Example: ${prefix}replace ET 12345 1 @SilvStar`)
+			.addField(`Replacing others with an alt/slave in ET party`,
+				`Command: ${prefix}replace ET ID slot# @person alt\n` +
+				`Example: ${prefix}replace ET 12345 1 @SilvStar alt`)
 			.addField(`Remove someone from ET party`,
 				`Command: ${prefix}remove ET ID slot#\n` +
 				`Example: ${prefix}remove ET 12345 1`)
