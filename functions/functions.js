@@ -602,7 +602,7 @@ module.exports = {
 					if (newET.role1User !== null && newET.role2User !== null && newET.role3User !== null && newET.role4User !== null && newET.role5User !== null && newET.role6User !== null) {
 						// logger.info(`Saved discord ID: ` + newET.discordChannel);
 						newET.status = "FULL"
-						DB.updateET(ET)
+						DB.updateET(etParty)
 						const discordChannelMatch = String(newET.discordChannel).match(/\<\#(.*?)\>/);
 						if (discordChannelMatch) {
 							const chanId = String(discordChannelMatch[1]);
