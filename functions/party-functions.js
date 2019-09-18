@@ -13,12 +13,12 @@ module.exports = {
   //returns all available parties
   getParties: function(message) {
     parties = [];
-		if(message.channel.id === varFile.BOT_CMD_ET_CHANNEL_ID) {
+		// if(message.channel.id === varFile.BOT_CMD_ET_CHANNEL_ID) { // channel catching in index.js
       var results = varFile.DB.findOpenET();
       results.forEach(party => {
         parties.push(party)
       });
-    }
+    // }
     return parties
   },
   //show all available parties
@@ -30,9 +30,9 @@ module.exports = {
       var choices = "";
       parties.forEach((party, i) => {
         if (party.status === "OPEN") {
-          this.availbleRoles(party)
+          this.availableRoles(party)
           choices += `**${i + 1} - ${party.name} | ${party.date} (${party.romChannel})** \n`
-          choices += `\t Available Roles: ${this.availbleRoles(party).join(" | ")}\n\n`
+          choices += `\t Available Roles: ${this.availableRoles(party).join(" | ")}\n\n`
         }
       });
     }
@@ -49,7 +49,7 @@ module.exports = {
     return DB.findET(name);
   },
   //returns all available roles in a party
-  availbleRoles: function(party) {
+  availableRoles: function(party) {
     roles = [];
     for(i=1;i<7;i++) {
       if(party[`role${i}User`] === null) {
@@ -60,11 +60,11 @@ module.exports = {
   },
   //join specific party with role
   joinParty: async function(message, party, role) {
-    if(!party || !role) {
-      message.channel.send(`Please enter a valid role`)
+    if(!party || !role) { // check input on second try and cancel if invalid
+      message.channel.send(`Role number not valid. Applying for party cancelled!`)
     } else {
-      if(!this.availbleRoles(party).includes(role)) {
-        message.channel.send(`An error occurred while trying to join the party`)
+      if(!this.availableRoles(party).includes(role)) {
+        message.channel.send(`An error occurred while trying to join the party.`)
       } else {
         for(i=1;i<7;i++) {
           if(party[`role${i}User`] === null && party[`role${i}Name`] === role) {
@@ -73,12 +73,12 @@ module.exports = {
           }
         }        
         let joinedParty = DB.updateET(party);
-        msg = await message.channel.send(`<@${message.author.id}> just joined ${party.name}`)
+        msg = await message.channel.send(`<@${message.author.id}> just joined ${party.name}.`)
         //setTimeout(function () {}, 15000);
 
         const embed = this.getEmbed(joinedParty, ET_TYPE)
         msg = await message.channel.send(embed)
-        if (this.availbleRoles(party).length == 0) {
+        if (this.availableRoles(party).length == 0) {
           // logger.info(`Saved discord ID: ` + newET.discordChannel);
           joinedParty.status = "FULL"
           DB.updateET(party)
@@ -88,7 +88,7 @@ module.exports = {
             logger.info(`Channel ID: ${chanId}`);
             bot.channels.get(chanId).send(embed);
             await msg.delete(2000)
-            message.channel.send(`Full party ${joinedParty.name} moved to ${joinedParty.discordChannel}`);
+            message.channel.send(`Full party ${joinedParty.name} moved to ${joinedParty.discordChannel}.`);
           }
         }
       }

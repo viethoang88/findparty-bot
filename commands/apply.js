@@ -21,7 +21,7 @@ module.exports = {
     } else {
       chosenParty = partyFunc.getParty(parties[response.first().content - 1].name)
        
-      var availRoles = partyFunc.availbleRoles(chosenParty)
+      var availRoles = partyFunc.availableRoles(chosenParty)
       var choices = "";
       for(i=0;i<availRoles.length;i++) {
         choices += `${i + 1} - ${availRoles[i]} \n`
@@ -29,7 +29,12 @@ module.exports = {
       message.channel.send('**Choose an available role**');
       message.channel.send(choices);
       var response = await message.channel.awaitMessages(m => m.author.id === message.author.id, {maxMatches: 1, time: 10000})
-      chosenRole = availRoles[response.first().content - 1]
+      chosenRole = availRoles[response.first().content - 1];
+      if(!chosenParty || !chosenRole) { // check input on first try
+        message.channel.send(`Please enter a valid role.`);
+        response = await message.channel.awaitMessages(m => m.author.id === message.author.id, {maxMatches: 1, time: 10000});
+        chosenRole = availRoles[response.first().content - 1];
+      }
       partyFunc.joinParty(message, chosenParty, chosenRole);
     }
 	}
