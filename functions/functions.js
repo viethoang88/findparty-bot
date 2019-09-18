@@ -33,7 +33,9 @@ module.exports = {
 				`- :PartyID: is optional. If you don\'t specify, a 5 character ID will be generated and you can use it in other commands. \n`)
 			.addField(`Join ET party`,
 				`Command: ${prefix}join ET ID slot#\n` +
-				`Example: ${prefix}join ET se42GD 2`)
+				`Example: ${prefix}join ET se42GD 2\n` +
+				`or\n` +
+				`Command: ${prefix}apply ET`)
 			.addField(`Add others to ET party`,
 				`Command: ${prefix}add ET ID slot# @person\n` +
 				`Example: ${prefix}add ET 12345 1 @Shelli`)
