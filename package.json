@@ -7,7 +7,7 @@
   "dependencies": {
     "@feathersjs/feathers": "^3.3.1",
     "bufferutil": "^4.0.1",
-    "discord.js": "^11.4.2",
+    "discord.js": "^11.6.4",
     "lokijs": "^1.5.6",
     "randomcolor": "^0.5.4",
     "winston": "^3.2.1"
